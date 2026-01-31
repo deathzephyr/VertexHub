@@ -543,8 +543,61 @@
         /* Unit/Currency */ .unit-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
 
         /* --- GAMES STYLES --- */
-        .game-board { display: grid; gap: 10px; margin: 0 auto; max-width: 250px; }
-        /* TicTacToe */ .ttt-grid { grid-template-columns: repeat(3, 1fr); } .ttt-cell { aspect-ratio: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; } .ttt-cell:hover { background: rgba(255,255,255,0.1); }
+        .game-board { display: grid; gap: 10px; margin: 0 auto; max-width: 250px; width: 100%; }
+        
+        /* TIC TAC TOE UI UPDATE */
+        .ttt-mode-selector {
+            display: flex;
+            background: rgba(255,255,255,0.05);
+            padding: 4px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .ttt-mode-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+        }
+        .ttt-mode-btn:hover { color: white; background: rgba(255,255,255,0.05); }
+        .ttt-mode-btn.active {
+            background: var(--color-games);
+            color: white;
+            box-shadow: 0 2px 10px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Tabuleiro */
+        .ttt-grid { 
+            grid-template-columns: repeat(3, 1fr); 
+            width: 100%; 
+            aspect-ratio: 1 / 1; 
+        } 
+        
+        .ttt-cell { 
+            aspect-ratio: 1; 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 8px; 
+            font-size: 2rem; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            transition: 0.2s;
+            color: white;
+            min-height: 50px;
+        } 
+        .ttt-cell:hover:not(:empty) { background: rgba(255,255,255,0.05); } 
+        .ttt-cell:empty:hover { background: rgba(255,255,255,0.15); }
+        
         /* RPS */ .rps-choices { display: flex; justify-content: center; gap: 15px; margin: 20px 0; } .rps-btn { font-size: 2rem; background: rgba(255,255,255,0.05); border: none; width: 70px; height: 70px; border-radius: 50%; cursor: pointer; transition: 0.2s; } .rps-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); } .rps-result { text-align: center; font-size: 1.2rem; font-weight: bold; min-height: 1.5em; }
         /* Coin */ .coin-container { width: 100px; height: 100px; margin: 20px auto; perspective: 600px; } .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 1s; } .coin-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 2rem; border-radius: 50%; border: 2px solid var(--glass-border); } .coin-front { background: #fbbf24; } .coin-back { background: #cbd5e1; transform: rotateY(180deg); }
         /* Dice */ .dice-box { text-align: center; font-size: 4rem; padding: 30px; background: rgba(255,255,255,0.05); border-radius: 20px; margin-bottom: 20px; }
@@ -599,7 +652,8 @@
 
     <div class="container">
         <header>
-            <div class="logo"><i class="fa-solid fa-layer-group"></i> LDX</div>
+            <!-- Ícone alterado para fa-cube (Cubo 3D) -->
+            <div class="logo"><i class="fa-solid fa-cube"></i> LDX</div>
             
             <!-- Controles do Header (CentralHub Theme) -->
             <div class="header-controls">
@@ -826,14 +880,16 @@
 
         <!-- GAMES START -->
         
-        <!-- 11. TIC TAC TOE (CORRIGIDO) -->
+        <!-- 11. TIC TAC TOE (MELHORADO) -->
         <div class="modal-container" id="tictactoeModal">
             <div class="modal-header"><div class="modal-title" style="color:var(--color-games)">Jogo da Velha</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
-            <!-- Seletor de Modo -->
-            <select id="tttMode" onchange="initTTT()" style="margin-bottom:15px;">
-                <option value="pvp">Modo: 1x1 (Dois Jogadores)</option>
-                <option value="bot">Modo: Vs Bot (Computador)</option>
-            </select>
+            
+            <!-- Seletor de Modo BONITO -->
+            <div class="ttt-mode-selector">
+                <button class="ttt-mode-btn active" id="modePvp" onclick="setTTTMode('pvp')">1x1 Local</button>
+                <button class="ttt-mode-btn" id="modeBot" onclick="setTTTMode('bot')">Vs Bot (CPU)</button>
+            </div>
+
             <div style="text-align:center; margin-bottom:10px;" id="tttStatus">Vez do Jogador X</div>
             <div class="game-board ttt-grid" id="tttBoard"></div>
             <button class="btn-tool" style="background:var(--color-games); margin-top:20px;" onclick="initTTT()">Reiniciar</button>
@@ -1036,21 +1092,36 @@
         function saveHabits() { localStorage.setItem('ldx_habits', JSON.stringify(habits)); }
         function renderHabits() { const l=document.getElementById('habitList'); l.innerHTML=''; habits.forEach((h,i)=> { l.innerHTML+=`<div class="todo-item"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHabit(${i})"><span class="todo-text" style="${h.done?'text-decoration:line-through;color:var(--color-personal)':''}">${h.text}</span><i class="fa-solid fa-trash todo-del" onclick="delHabit(${i})"></i></div>`; }); }
 
-        /* --- GAMES LOGIC (CORRIGIDO) --- */
+        /* --- GAMES LOGIC (MELHORADO) --- */
         
-        /* 11. TIC TAC TOE (NOVA LÓGICA) */
-        let board = ['', '', '', '', '', '', '', '']; 
-        let currentPlayer = 'X'; 
-        let gameActive = true;
-        let gameMode = 'pvp'; 
+        /* 11. TIC TAC TOE (UI & AI) */
+        let tttBoardState = ["", "", "", "", "", "", "", "", ""];
+        let tttGameActive = true;
+        let tttCurrentPlayer = "X";
+        let tttGameMode = "pvp";
 
-        const winningConditions = [ [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6] ];
+        const tttWinningConditions = [ 
+            [0, 1, 2], [3, 4, 5], [6, 7, 8], 
+            [0, 3, 6], [1, 4, 7], [2, 5, 8], 
+            [0, 4, 8], [2, 4, 6] 
+        ];
+
+        // Função para trocar o modo visualmente
+        function setTTTMode(mode) {
+            tttGameMode = mode;
+            document.getElementById('modePvp').classList.remove('active');
+            document.getElementById('modeBot').classList.remove('active');
+            
+            if(mode === 'pvp') document.getElementById('modePvp').classList.add('active');
+            else document.getElementById('modeBot').classList.add('active');
+            
+            initTTT();
+        }
 
         function initTTT() {
-            gameMode = document.getElementById('tttMode').value;
-            board = ['', '', '', '', '', '', '', ''];
-            gameActive = true;
-            currentPlayer = 'X';
+            tttBoardState = ["", "", "", "", "", "", "", "", ""];
+            tttGameActive = true;
+            tttCurrentPlayer = "X";
             document.getElementById('tttStatus').textContent = "Vez do Jogador X";
             renderTTTBoard();
         }
@@ -1058,50 +1129,91 @@
         function renderTTTBoard() {
             const container = document.getElementById('tttBoard');
             container.innerHTML = '';
-            board.forEach((cell, index) => {
+            tttBoardState.forEach((cell, index) => {
                 const cellDiv = document.createElement('div');
                 cellDiv.classList.add('ttt-cell');
                 cellDiv.textContent = cell;
-                cellDiv.addEventListener('click', () => handleCellClick(index));
+                cellDiv.addEventListener('click', () => handleTTTClick(index));
                 container.appendChild(cellDiv);
             });
         }
 
-        function handleCellClick(index) {
-            if (board[index] !== '' || !gameActive) return;
+        function handleTTTClick(index) {
+            if (!tttGameActive || tttBoardState[index] !== "") return;
 
-            updateCell(index, currentPlayer);
+            tttBoardState[index] = tttCurrentPlayer;
             
-            if (checkWin(currentPlayer)) {
-                document.getElementById('tttStatus').textContent = `Jogador ${currentPlayer} Venceu!`;
-                gameActive = false;
-            } else if (!board.includes('')) {
+            if (checkTTTWin()) {
+                document.getElementById('tttStatus').textContent = `Jogador ${tttCurrentPlayer} Venceu!`;
+                tttGameActive = false;
+                renderTTTBoard();
+                return; 
+            }
+            
+            if (!tttBoardState.includes("")) {
                 document.getElementById('tttStatus').textContent = "Empate!";
-                gameActive = false;
-            } else {
-                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-                document.getElementById('tttStatus').textContent = gameMode === 'bot' && currentPlayer === 'O' ? "Vez do Bot..." : `Vez do Jogador ${currentPlayer}`;
-                
-                if (gameMode === 'bot' && currentPlayer === 'O' && gameActive) {
-                    setTimeout(botMove, 500);
+                tttGameActive = false;
+                renderTTTBoard();
+                return;
+            }
+
+            tttCurrentPlayer = tttCurrentPlayer === "X" ? "O" : "X";
+            document.getElementById('tttStatus').textContent = `Vez do Jogador ${tttCurrentPlayer}`;
+            
+            renderTTTBoard();
+            
+            if (tttGameMode === 'bot' && tttCurrentPlayer === 'O' && tttGameActive) {
+                setTimeout(botTTTMove, 600);
+            }
+        }
+
+        function checkTTTWin() {
+            return tttWinningConditions.some(condition => {
+                return condition.every(index => tttBoardState[index] === tttCurrentPlayer);
+            });
+        }
+
+        // AI MELHORADA (Heurística Básica)
+        function botTTTMove() {
+            if (!tttGameActive) return;
+            
+            // 1. Tentar Ganhar
+            let move = findBestMove("O");
+            if (move !== null) {
+                handleTTTClick(move);
+                return;
+            }
+
+            // 2. Bloquear Jogador
+            move = findBestMove("X");
+            if (move !== null) {
+                handleTTTClick(move);
+                return;
+            }
+
+            // 3. Jogar Aleatório (Se não houver ameaça)
+            const available = tttBoardState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
+            if (available.length > 0) {
+                const randomMove = available[Math.floor(Math.random() * available.length)];
+                handleTTTClick(randomMove);
+            }
+        }
+
+        function findBestMove(player) {
+            for (let condition of tttWinningConditions) {
+                let [a, b, c] = condition;
+                let vals = [tttBoardState[a], tttBoardState[b], tttBoardState[c]];
+                // Se o jogador tem 2 e a 3ª está vazia
+                let countPlayer = vals.filter(v => v === player).length;
+                let countEmpty = vals.filter(v => v === "").length;
+
+                if (countPlayer === 2 && countEmpty === 1) {
+                    if (tttBoardState[a] === "") return a;
+                    if (tttBoardState[b] === "") return b;
+                    if (tttBoardState[c] === "") return c;
                 }
             }
-            renderTTTBoard();
-        }
-
-        function updateCell(index, player) { board[index] = player; }
-
-        function checkWin(player) {
-            return winningConditions.some(condition => { return condition.every(index => board[index] === player); });
-        }
-
-        function botMove() {
-            if (!gameActive) return;
-            let availableIndices = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
-            if (availableIndices.length > 0) {
-                let randomMove = availableIndices[Math.floor(Math.random() * availableIndices.length)];
-                handleCellClick(randomMove);
-            }
+            return null; // Não há movimento crítico
         }
 
         /* 12. RPS */
