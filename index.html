@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>LDX | VertexHub</title>
+    <link rel="icon" type="image/png" href="img.png">
+    
+    <!-- Fontes Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- DESIGN SYSTEM (BASEADO NO CENTRALHUB) --- */
+        :root {
+            --bg-dark: #050507;
+            --glass-bg: rgba(20, 20, 25, 0.6); 
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --accent-primary: #8b5cf6; 
+            --accent-secondary: #ec4899; 
+            --accent-cyan: #06b6d4; 
+            --text-main: #ffffff;
+            --text-muted: #94a3b8;
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            
+            /* Cores das Marcas (CentralHub) */
+            --color-google: #EA4335;
+            --color-youtube: #FF0000;
+            --color-bing: #008373;
+            --color-amazon: #FF9900;
+            --color-reddit: #FF4500;
+            --color-wiki: #FFFFFF;
+            --color-spotify: #1DB954;
+            --color-shopee: #ee4d2d;   
+            --color-discord: #5865F2;  
+            --color-whatsapp: #25D366; 
+            --color-tiktok: #ff0050;   
+            --color-netflix: #E50914;  
+            --color-globo: #00AEEF;    
+            --color-uol: #0054A6;      
+
+            /* Cores das Categorias UtilityHub */
+            --color-prod: #3b82f6;      /* Azul */
+            --color-personal: #ec4899;   /* Rosa */
+            --color-games: #a855f7;     /* Roxo */
+            --color-tools: #f59e0b;     /* Laranja */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
+
+        /* --- BACKGROUND LAYER SYSTEM (CONEXÃO LDX) --- */
+        #custom-bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh; 
+            z-index: -2;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            pointer-events: none;
+        }
+
+        body.has-custom-bg .ambient-light {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        body.has-custom-bg #custom-bg-layer {
+            opacity: 1;
+        }
+
+        /* --- BACKGROUND AMBIENTE --- */
+        .ambient-light {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: 0.4;
+            animation: floatOrb 25s infinite alternate ease-in-out;
+        }
+        /* Cores dos orbes inspiradas nas categorias */
+        .orb-1 { width: 500px; height: 500px; background: var(--color-prod); top: -150px; left: -150px; animation-duration: 30s; }
+        .orb-2 { width: 600px; height: 600px; background: var(--accent-primary); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
+        .orb-3 { width: 350px; height: 350px; background: var(--color-tools); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
+
+        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
+        @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
+
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; }
+
+        /* --- HEADER --- */
+        header { display: flex; justify-content: space-between; align-items: center; padding: 2rem 0; position: relative; }
+        .logo { font-size: 1.6rem; font-weight: 700; background: linear-gradient(to right, #fff, #cbd5e1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 12px; text-shadow: 0 0 30px rgba(255,255,255,0.1); }
+        
+        .header-controls { display: flex; align-items: center; gap: 12px; position: relative; z-index: 10; }
+        .header-btn-wrapper { position: relative; flex-shrink: 0; }
+        
+        .header-btn {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            position: relative;
+            z-index: 10;
+        }
+        .header-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .header-btn i { font-size: 1.1rem; }
+
+        .header-dropdown {
+            position: absolute;
+            top: 120%; right: 0;
+            background: rgba(15, 15, 20, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            padding: 6px;
+            width: 160px;
+            display: none; 
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+        .header-dropdown.active { display: flex; opacity: 1; transform: translateY(0); }
+
+        .dropdown-option {
+            padding: 10px 14px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+            cursor: pointer;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        /* Cores dos Filtros no Dropdown */
+        #catDropdown .dropdown-option[data-cat-filter="prod"] { color: var(--color-prod); }
+        #catDropdown .dropdown-option[data-cat-filter="personal"] { color: var(--color-personal); }
+        #catDropdown .dropdown-option[data-cat-filter="games"] { color: var(--color-games); }
+        #catDropdown .dropdown-option[data-cat-filter="tools"] { color: var(--color-tools); }
+
+        .dropdown-option:hover { background: rgba(255,255,255,0.08); transform: translateX(2px); }
+        .dropdown-option.selected { background: rgba(255,255,255,0.05); color: inherit !important; font-weight: 700; }
+
+        /* --- HERO --- */
+        .hero { text-align: center; margin: 3rem 0 2rem; position: relative; }
+        
+        @keyframes colorCycle {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .hero h1 { 
+            font-size: 3.8rem; font-weight: 700; line-height: 1.05; margin-bottom: 1rem;
+            background: linear-gradient(90deg, #3b82f6, #ec4899, #a855f7, #f59e0b, #ffffff, #3b82f6);
+            background-size: 300% auto;
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            animation: colorCycle 6s linear infinite;
+            letter-spacing: -2px; 
+            filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); 
+        }
+        
+        .hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 550px; margin: 0 auto 2.5rem; padding: 0 10px; font-weight: 400; }
+
+        /* --- BARRA DE PESQUISA (ESTILO CENTRALHUB) --- */
+        .search-wrapper { position: relative; max-width: 700px; margin: 0 auto; z-index: 100; width: 100%; }
+        
+        .search-bar { 
+            position: relative; display: flex; align-items: center; 
+            background: rgba(20, 20, 25, 0.7); 
+            border: 1px solid var(--glass-border); 
+            border-radius: 28px; 
+            padding: 6px; 
+            backdrop-filter: blur(40px); 
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.05), 0 20px 50px -12px rgba(0,0,0,0.6); 
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+            overflow: visible;
+        }
+
+        .search-bar:focus-within { 
+            background: rgba(25, 25, 30, 0.85); 
+            border-color: rgba(139, 92, 246, 0.4); 
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1), 0 30px 60px -12px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15); 
+            transform: translateY(-2px); 
+        }
+
+        /* Seletor de Motor */
+        .engine-selector { position: relative; margin-right: 5px; flex-shrink: 0; }
+        
+        .engine-btn {
+            background: rgba(255,255,255,0.03);
+            border: none;
+            border-radius: 22px;
+            height: 48px;
+            padding: 0 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        
+        .engine-btn:hover { background: rgba(255,255,255,0.08); }
+        .engine-btn i { font-size: 1.1rem; transition: color 0.3s; }
+        
+        /* Dropdown Engine */
+        .engine-dropdown {
+            position: absolute;
+            top: 120%; left: 0;
+            background: rgba(15, 15, 20, 0.98);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 6px;
+            width: 180px;
+            display: none; 
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.2s ease;
+            max-height: 320px;
+            overflow-y: auto;
+            z-index: 101;
+        }
+        
+        .engine-dropdown::-webkit-scrollbar { width: 6px; }
+        .engine-dropdown::-webkit-scrollbar-track { background: transparent; }
+        .engine-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+        .engine-dropdown::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
+        .engine-dropdown.active { display: flex; opacity: 1; transform: translateY(0); }
+        
+        .engine-option {
+            padding: 10px 14px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: 0.2s;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .engine-option:hover { background: rgba(255,255,255,0.08); color: white; }
+        .engine-option.selected { background: rgba(255,255,255,0.05); color: white; font-weight: 500; }
+        
+        /* Cores dos Ícones de Busca */
+        .icon-google { color: var(--color-google); }
+        .icon-youtube { color: var(--color-youtube); }
+        .icon-bing { color: var(--color-bing); }
+        .icon-ddg { color: var(--color-shopee); } 
+        .icon-amazon { color: var(--color-amazon); }
+        .icon-reddit { color: var(--color-reddit); }
+        .icon-wiki { color: var(--color-wiki); }
+        .icon-spotify { color: var(--color-spotify); }
+
+        /* Input */
+        .search-input-container { flex: 1; position: relative; }
+        .search-input { 
+            width: 100%; background: transparent; border: none; 
+            padding: 16px 10px; font-size: 1.15rem; color: white; 
+            font-family: 'Space Grotesk', sans-serif; font-weight: 500; 
+        }
+        .search-input::placeholder { color: rgba(255,255,255,0.25); }
+
+        /* Botões de Ação */
+        .action-btns { display: flex; align-items: center; gap: 8px; padding-right: 6px; flex-shrink: 0; }
+
+        .btn-icon {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .btn-icon:hover { background: rgba(255,255,255,0.08); color: white; transform: scale(1.05); }
+
+        .btn-mic.listening { 
+            color: var(--color-google); 
+            animation: pulseMic 1.5s infinite; 
+        }
+        
+        @keyframes pulseMic {
+            0% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(234, 67, 53, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0); }
+        }
+
+        .btn-submit { 
+            background: var(--gradient-primary); 
+            color: white; 
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
+        }
+        .btn-submit:hover { 
+            transform: scale(1.05) rotate(-10deg); 
+            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5); 
+        }
+
+        /* Histórico */
+        .search-history {
+            position: absolute;
+            top: 110%; left: 60px; right: 60px;
+            background: rgba(15, 15, 20, 0.95);
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 8px 0;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            z-index: 99;
+        }
+        .search-history.active { display: flex; animation: slideDown 0.2s ease-out; }
+        
+        .history-item {
+            padding: 10px 20px;
+            display: flex; align-items: center; gap: 12px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .history-item:hover { background: rgba(255,255,255,0.05); color: white; padding-left: 25px; }
+        .history-item i { font-size: 0.8rem; }
+
+        .history-label {
+            padding: 5px 20px;
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- GRID & SEÇÕES --- */
+        .bento-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 16px; padding-bottom: 5rem; transition: all 0.3s ease; }
+        
+        .section-header { 
+            grid-column: 1 / -1; 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+            margin: 2.5rem 0 1.5rem 0; 
+            padding-bottom: 0.5rem; 
+            border-bottom: 1px solid rgba(255,255,255,0.08); 
+        }
+        
+        .section-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
+        .section-line { height: 1px; width: 100%; background: linear-gradient(to right, rgba(255,255,255,0.2), transparent); }
+
+        /* Cores das Seções (Linhas e Títulos) */
+        .header-prod .section-title { color: var(--color-prod); } .header-prod .section-line { background: linear-gradient(to right, var(--color-prod), transparent); }
+        .header-personal .section-title { color: var(--color-personal); } .header-personal .section-line { background: linear-gradient(to right, var(--color-personal), transparent); }
+        .header-games .section-title { color: var(--color-games); } .header-games .section-line { background: linear-gradient(to right, var(--color-games), transparent); }
+        .header-tools .section-title { color: var(--color-tools); } .header-tools .section-line { background: linear-gradient(to right, var(--color-tools), transparent); }
+
+        /* --- CARDS --- */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 20px;
+            text-decoration: none;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.1s linear, box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
+            backdrop-filter: blur(25px);
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            transform-style: preserve-3d;
+            will-change: transform;
+            cursor: pointer;
+        }
+        .card::after {
+            content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
+            transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 5; 
+        }
+        .card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
+        .card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255,255,0.4); }
+        
+        /* Animação de Clique (Shrink) */
+        .card.clicked { transform: scale(0.95); opacity: 0.8; box-shadow: none; }
+        
+        /* Animação Ripple */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple-anim 0.6s ease-out;
+            pointer-events: none;
+            z-index: 1;
+        }
+        @keyframes ripple-anim { to { transform: scale(4); opacity: 0; } }
+
+        .card-bg-icon { position: absolute; right: -10px; bottom: -10px; font-size: 5rem; opacity: 0.04; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
+        .card:hover .card-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.2); }
+        .card-content { 
+            position: relative; 
+            z-index: 20 !important; 
+            transform: translateZ(20px); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            gap: 8px; 
+            width: 100%; 
+            justify-content: center; 
+            height: 100%; 
+            pointer-events: none; 
+        }
+
+        .card-icon { 
+            width: 42px; 
+            height: 42px; 
+            aspect-ratio: 1/1; 
+            border-radius: 6px; 
+            background: rgba(255,255,255,0.05); 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 1.1rem; 
+            border: 1px solid rgba(255,255,255,0.05); 
+            transition: all 0.3s ease; 
+            margin-bottom: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); line-height: 0; 
+            position: relative; 
+            z-index: 10 !important;
+            flex-shrink: 0; 
+        }
+        .card-icon i { display: inline-flex; align-items: center; justify-content: center; margin: 0; vertical-align: middle; }
+        
+        .card:hover .card-icon { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
+        .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.3px; }
+        .card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; }
+
+        /* Cores dos Cards (Hover Effects) */
+        .card[data-cat="prod"] .card-icon { color: var(--color-prod); text-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
+        .card[data-cat="prod"]:hover { box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); }
+
+        .card[data-cat="personal"] .card-icon { color: var(--color-personal); text-shadow: 0 0 15px rgba(236, 72, 153, 0.2); }
+        .card[data-cat="personal"]:hover { box-shadow: 0 20px 40px -10px rgba(236, 72, 153, 0.3), 0 0 0 1px rgba(236, 72, 153, 0.1); border-color: rgba(236, 72, 153, 0.3); }
+        
+        .card[data-cat="games"] .card-icon { color: var(--color-games); text-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+        .card[data-cat="games"]:hover { box-shadow: 0 20px 40px -10px rgba(168, 85, 247, 0.3), 0 0 0 1px rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3); }
+        
+        .card[data-cat="tools"] .card-icon { color: var(--color-tools); text-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
+        .card[data-cat="tools"]:hover { box-shadow: 0 20px 40px -10px rgba(245, 158, 11, 0.3), 0 0 0 1px rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); }
+
+        /* --- MODAL --- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(15px); z-index: 1000;
+            display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-container {
+            background: rgba(15, 15, 20, 0.95); border: 1px solid var(--glass-border);
+            width: 90%; max-width: 450px; max-height: 85vh; border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.7); padding: 24px;
+            position: relative; transform: scale(0.9); transition: transform 0.3s;
+            display: none; flex-direction: column; overflow-y: auto;
+        }
+        .modal-container.active-modal { display: flex; transform: scale(1); }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .modal-title { font-size: 1.25rem; font-weight: 600; font-family: 'Space Grotesk', sans-serif; }
+        .close-modal { background: rgba(255,255,255,0.05); border: none; width: 32px; height: 32px; border-radius: 50%; color: var(--text-muted); cursor: pointer; transition: 0.2s; }
+        .close-modal:hover { background: rgba(255,255,255,0.15); color: white; }
+
+        /* --- FORM ELEMENTS --- */
+        .btn-tool { width: 100%; padding: 12px; border-radius: 12px; border: none; font-weight: 600; cursor: pointer; color: white; transition: 0.2s; margin-top: 10px; }
+        input, select, textarea { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); color: white; padding: 12px; border-radius: 8px; margin-bottom: 10px; font-family: 'Inter', sans-serif; }
+        input:focus, select:focus, textarea:focus { border-color: white; }
+
+        /* --- SPECIFIC TOOLS --- */
+        /* Calc */ .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; } .calc-screen { grid-column: span 4; background: #000; color: white; padding: 15px; text-align: right; font-size: 1.5rem; border-radius: 8px; margin-bottom: 10px; font-family: monospace; } .calc-btn { background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); padding: 12px; border-radius: 8px; color: white; cursor: pointer; } .calc-btn:hover { background: rgba(255,255,255,0.1); } .calc-btn.op { color: var(--color-prod); } .calc-btn.eq { background: var(--color-prod); grid-column: span 2; }
+
+        /* Notes */ .notes-area { height: 200px; resize: none; line-height: 1.5; }
+
+        /* Timer/Pomodoro */ .timer-display { font-size: 3rem; font-weight: 700; text-align: center; font-family: monospace; margin: 20px 0; } .timer-controls { display: flex; gap: 10px; } .timer-btn { flex: 1; padding: 10px; border-radius: 8px; border: none; cursor: pointer; color: white; font-weight: 600; }
+
+        /* To-Do */ .todo-item { display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.03); padding: 10px; border-radius: 8px; margin-bottom: 5px; } .todo-text { flex: 1; margin-left: 10px; } .todo-del { color: #ef4444; cursor: pointer; }
+
+        /* Weather */ .weather-box { text-align: center; padding: 20px 0; } .weather-temp { font-size: 4rem; font-weight: 700; line-height: 1; } .weather-desc { text-transform: capitalize; color: var(--text-muted); margin-top: 5px; }
+
+        /* Unit/Currency */ .unit-row { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+
+        /* --- GAMES STYLES --- */
+        .game-board { display: grid; gap: 10px; margin: 0 auto; max-width: 250px; }
+        /* TicTacToe */ .ttt-grid { grid-template-columns: repeat(3, 1fr); } .ttt-cell { aspect-ratio: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; } .ttt-cell:hover { background: rgba(255,255,255,0.1); }
+        /* RPS */ .rps-choices { display: flex; justify-content: center; gap: 15px; margin: 20px 0; } .rps-btn { font-size: 2rem; background: rgba(255,255,255,0.05); border: none; width: 70px; height: 70px; border-radius: 50%; cursor: pointer; transition: 0.2s; } .rps-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); } .rps-result { text-align: center; font-size: 1.2rem; font-weight: bold; min-height: 1.5em; }
+        /* Coin */ .coin-container { width: 100px; height: 100px; margin: 20px auto; perspective: 600px; } .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 1s; } .coin-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 2rem; border-radius: 50%; border: 2px solid var(--glass-border); } .coin-front { background: #fbbf24; } .coin-back { background: #cbd5e1; transform: rotateY(180deg); }
+        /* Dice */ .dice-box { text-align: center; font-size: 4rem; padding: 30px; background: rgba(255,255,255,0.05); border-radius: 20px; margin-bottom: 20px; }
+        /* Reflex */ .reflex-area { height: 200px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; transition: background 0.1s; } .reflex-area.waiting { background: #ef4444; } .reflex-area.now { background: #10b981; } .reflex-area:active { transform: scale(0.98); }
+
+        /* Footer */
+        footer { text-align: center; padding: 2rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: 3rem; font-size: 0.8rem; position: relative; z-index: 2; background: transparent; }
+
+        /* --- MOBILE --- */
+        @media (max-width: 600px) { 
+            .hero h1 { font-size: 2.4rem; } 
+            .container { padding: 0 1rem; } 
+            .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+            
+            .search-wrapper { width: 100%; padding: 0; }
+            .engine-btn {
+                width: 44px; padding: 0; justify-content: center; border-radius: 50%; margin-right: 5px;
+            }
+            #currentEngineName, .engine-btn .fa-chevron-down { display: none !important; }
+            .engine-dropdown { width: 100%; left: 0; top: 130%; border-radius: 12px; max-height: 40vh; }
+            .search-input { font-size: 1rem; padding: 12px 8px; }
+            .btn-icon { width: 40px; height: 40px; }
+            .btn-mic { margin-right: 4px; }
+            .search-history { left: 5px; right: 5px; border-radius: 12px; }
+            .history-item { padding: 12px 15px; font-size: 0.95rem; }
+            .dropdown-option[data-cols="auto"] { display: none !important; }
+        }
+        
+        @media (min-width: 601px) {
+            .dropdown-option[data-cols="2"], .dropdown-option[data-cols="3"] { display: none; }
+        }
+
+        /* Estilos para opção 5 Colunas (Compactada) */
+        .bento-grid.cols-5 { gap: 8px; }
+        .bento-grid.cols-5 .card { height: 110px; padding: 8px; }
+        .bento-grid.cols-5 .card-icon { width: 26px; height: 26px; font-size: 0.75rem; margin-bottom: 4px; padding: 0; }
+        .bento-grid.cols-5 .card h3 { font-size: 0.65rem; line-height: 1.1; margin: 0; }
+        .bento-grid.cols-5 .card p { display: none; }
+        .bento-grid.cols-5 .card-bg-icon { display: none; }
+    </style>
+</head>
+<body>
+
+    <!-- CAMADA DE FUNDO PERSONALIZADO (FIXO) -->
+    <div id="custom-bg-layer"></div>
+
+    <div class="ambient-light">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="logo"><i class="fa-solid fa-layer-group"></i> LDX</div>
+            
+            <!-- Controles do Header (CentralHub Theme) -->
+            <div class="header-controls">
+                
+                <!-- BOTÃO HOME (LINK ATUALIZADO) -->
+                <a href="https://deathzephyr.github.io/PortaisLDX/" class="header-btn" title="Voltar" target="_self">
+                    <i class="fa-solid fa-house"></i>
+                </a>
+
+                <div class="header-btn-wrapper">
+                    <button class="header-btn" id="gridBtn" title="Layout"><i class="fa-solid fa-border-all"></i></button>
+                    <div class="header-dropdown" id="gridDropdown">
+                        <div class="dropdown-option" data-cols="auto">Padrão (Auto)</div>
+                        <div class="dropdown-option" data-cols="2">2 Colunas</div>
+                        <div class="dropdown-option" data-cols="3">3 Colunas</div>
+                        <div class="dropdown-option" data-cols="5">5 Colunas</div>
+                    </div>
+                </div>
+
+                <div class="header-btn-wrapper">
+                    <button class="header-btn" id="catBtn" title="Filtrar Categoria"><i class="fa-solid fa-filter"></i></button>
+                    <div class="header-dropdown" id="catDropdown">
+                        <div class="dropdown-option selected" data-cat-filter="all">Todas</div>
+                        <div class="dropdown-option" data-cat-filter="prod">Produtividade</div>
+                        <div class="dropdown-option" data-cat-filter="personal">Pessoal</div>
+                        <div class="dropdown-option" data-cat-filter="games">Jogos</div>
+                        <div class="dropdown-option" data-cat-filter="tools">Ferramentas</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <section class="hero">
+            <h1>VertexHub.</h1>
+            <p>Seus aplicativos essenciais, em um só lugar.</p>
+            
+            <!-- BARRA DE PESQUISA (MODELO CENTRALHUB) -->
+            <div class="search-wrapper">
+                <div class="search-bar">
+                    <!-- Seletor de Motor -->
+                    <div class="engine-selector">
+                        <button class="engine-btn" id="engineBtn" title="Trocar Motor de Busca">
+                            <i class="fa-brands fa-google icon-google" id="currentEngineIcon"></i>
+                            <span id="currentEngineName">Google</span>
+                            <i class="fa-solid fa-chevron-down" style="font-size: 0.7rem; margin-left: 4px; opacity: 0.5;"></i>
+                        </button>
+                        <div class="engine-dropdown" id="engineDropdown">
+                            <div class="engine-option selected" data-engine="google"><i class="fa-brands fa-google icon-google"></i> Google</div>
+                            <div class="engine-option" data-engine="bing"><i class="fa-brands fa-microsoft icon-bing"></i> Bing</div>
+                            <div class="engine-option" data-engine="duckduckgo"><i class="fa-solid fa-shield-cat icon-ddg"></i> DuckDuckGo</div>
+                            <div class="engine-option" data-engine="youtube"><i class="fa-brands fa-youtube icon-youtube"></i> YouTube</div>
+                            <div class="engine-option" data-engine="spotify"><i class="fa-brands fa-spotify icon-spotify"></i> Spotify</div>
+                            <div class="engine-option" data-engine="reddit"><i class="fa-brands fa-reddit icon-reddit"></i> Reddit</div>
+                            <div class="engine-option" data-engine="amazon"><i class="fa-brands fa-amazon icon-amazon"></i> Amazon</div>
+                            <div class="engine-option" data-engine="wikipedia"><i class="fa-brands fa-wikipedia-w icon-wiki"></i> Wikipedia</div>
+                        </div>
+                    </div>
+
+                    <!-- Input -->
+                    <form class="search-input-container" id="searchForm">
+                        <input type="text" class="search-input" placeholder="Buscar aplicativo ou pesquisar na web..." id="searchInput" autocomplete="off">
+                    </form>
+
+                    <!-- Botões -->
+                    <div class="action-btns">
+                        <button class="btn-icon btn-mic" id="voiceBtn" title="Pesquisa por Voz"><i class="fa-solid fa-microphone"></i></button>
+                        <button type="submit" form="searchForm" class="btn-icon btn-submit" title="Pesquisar"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                </div>
+
+                <!-- Dropdown de Histórico -->
+                <div class="search-history" id="searchHistory">
+                    <div class="history-label">Recentes</div>
+                    <div id="historyList">
+                        <!-- Itens inseridos via JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="bento-grid" id="bentoGrid">
+            
+            <!-- 1. PRODUTIVIDADE (AZUL) -->
+            <div class="section-header header-prod">
+                <div class="section-title"><i class="fa-solid fa-briefcase"></i> Produtividade</div><div class="section-line"></div>
+            </div>
+            <div class="card" data-cat="prod" onclick="openModal('calcModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-calculator"></i></div><h3>Calculadora</h3><p>Matemática Básica</p></div></div>
+            <div class="card" data-cat="prod" onclick="openModal('timerModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-stopwatch"></i></div><h3>Cronômetro</h3><p>Contagem Tempo</p></div></div>
+            <div class="card" data-cat="prod" onclick="openModal('pomodoroModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-clock"></i></div><h3>Pomodoro</h3><p>Foco 25/5 min</p></div></div>
+            <div class="card" data-cat="prod" onclick="openModal('passModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-key"></i></div><h3>Senha Segura</h3><p>Gerador Random</p></div></div>
+            <div class="card" data-cat="prod" onclick="openModal('todoModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-list-check"></i></div><h3>Lista de Tarefas</h3><p>To-Do List</p></div></div>
+
+            <!-- 2. PESSOAL (ROSA) -->
+            <div class="section-header header-personal">
+                <div class="section-title"><i class="fa-solid fa-user"></i> Pessoal</div><div class="section-line"></div>
+            </div>
+            <div class="card" data-cat="personal" onclick="openModal('weatherModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-cloud-sun"></i></div><h3>Clima</h3><p>Previsão Atual</p></div></div>
+            <div class="card" data-cat="personal" onclick="openModal('notesModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-sticky-note"></i></div><h3>Anotações</h3><p>Notas Locais</p></div></div>
+            <div class="card" data-cat="personal" onclick="openModal('imcModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-weight-scale"></i></div><h3>IMC</h3><p>Índice Massa Corporal</p></div></div>
+            <div class="card" data-cat="personal" onclick="openModal('ageModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-cake-candles"></i></div><h3>Idade</h3><p>Calculadora Data</p></div></div>
+            <div class="card" data-cat="personal" onclick="openModal('habitModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-repeat"></i></div><h3>Hábitos</h3><p>Rastreador Diário</p></div></div>
+
+            <!-- 3. JOGOS (ROXO) -->
+            <div class="section-header header-games">
+                <div class="section-title"><i class="fa-solid fa-gamepad"></i> Jogos & Entretenimento</div><div class="section-line"></div>
+            </div>
+            <div class="card" data-cat="games" onclick="openModal('tictactoeModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-x"></i></div><h3>Jogo da Velha</h3><p>Tic-Tac-Toe</p></div></div>
+            <div class="card" data-cat="games" onclick="openModal('rpsModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-hand-scissors"></i></div><h3>Pedra Papel Tesoura</h3><p>Sorteio Clássico</p></div></div>
+            <div class="card" data-cat="games" onclick="openModal('coinModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-coins"></i></div><h3>Cara ou Coroa</h3><p>Sorteio Virtual</p></div></div>
+            <div class="card" data-cat="games" onclick="openModal('diceModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-dice"></i></div><h3>Dados</h3><p>Role 1 a 6</p></div></div>
+            <div class="card" data-cat="games" onclick="openModal('reflexModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-bolt"></i></div><h3>Teste de Reflexo</h3><p>Reaja Rápido</p></div></div>
+
+            <!-- 4. FERRAMENTAS (LARANJA) -->
+            <div class="section-header header-tools">
+                <div class="section-title"><i class="fa-solid fa-toolbox"></i> Ferramentas</div><div class="section-line"></div>
+            </div>
+            <div class="card" data-cat="tools" onclick="openModal('colorModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-palette"></i></div><h3>Cor & Hex</h3><p>Seletor de Cores</p></div></div>
+            <div class="card" data-cat="tools" onclick="openModal('qrModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-qrcode"></i></div><h3>QR Code</h3><p>Gerador Grátis</p></div></div>
+            <div class="card" data-cat="tools" onclick="openModal('unitModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-ruler-combined"></i></div><h3>Conversor</h3><p>Unidades (Peso/Comp)</p></div></div>
+            <div class="card" data-cat="tools" onclick="openModal('currencyModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-money-bill-transfer"></i></div><h3>Câmbio</h3><p>Conversor Moeda</p></div></div>
+            <div class="card" data-cat="tools" onclick="openModal('textModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-font"></i></div><h3>Texto</h3><p>Upper/Lower/Title</p></div></div>
+
+        </div>
+
+        <footer><p>DESIGN BY LDX &copy; 2026</p></footer>
+    </div>
+
+    <!-- MODALS OVERLAY -->
+    <div class="modal-overlay" id="modalOverlay">
+
+        <!-- 1. CALCULADORA -->
+        <div class="modal-container" id="calcModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-prod)">Calculadora</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="calc-grid">
+                <div class="calc-screen" id="calcScreen">0</div>
+                <button class="calc-btn op" onclick="calcInput('C')">C</button><button class="calc-btn op" onclick="calcInput('/')">/</button><button class="calc-btn op" onclick="calcInput('*')">×</button><button class="calc-btn op" onclick="calcInput('back')">⌫</button>
+                <button class="calc-btn" onclick="calcInput('7')">7</button><button class="calc-btn" onclick="calcInput('8')">8</button><button class="calc-btn" onclick="calcInput('9')">9</button><button class="calc-btn op" onclick="calcInput('-')">-</button>
+                <button class="calc-btn" onclick="calcInput('4')">4</button><button class="calc-btn" onclick="calcInput('5')">5</button><button class="calc-btn" onclick="calcInput('6')">6</button><button class="calc-btn op" onclick="calcInput('+')">+</button>
+                <button class="calc-btn" onclick="calcInput('1')">1</button><button class="calc-btn" onclick="calcInput('2')">2</button><button class="calc-btn" onclick="calcInput('3')">3</button><button class="calc-btn eq" onclick="calcResult()">=</button>
+                <button class="calc-btn" onclick="calcInput('0')" style="grid-column: span 2">0</button><button class="calc-btn" onclick="calcInput('.')">.</button>
+            </div>
+        </div>
+
+        <!-- 2. CRONOMETRO -->
+        <div class="modal-container" id="timerModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-prod)">Cronômetro</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="timer-display" id="stopwatchDisplay">00:00:00</div>
+            <div class="timer-controls">
+                <button class="timer-btn" id="swStart" style="background:var(--color-prod)" onclick="toggleStopwatch()">Iniciar</button>
+                <button class="timer-btn" style="background:#333" onclick="resetStopwatch()">Zerar</button>
+            </div>
+        </div>
+
+        <!-- 3. POMODORO -->
+        <div class="modal-container" id="pomodoroModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-prod)">Pomodoro</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="timer-display" id="pomoDisplay">25:00</div>
+            <div class="timer-controls">
+                <button class="timer-btn" id="pomoStart" style="background:var(--color-prod)" onclick="togglePomodoro()">Focar</button>
+                <button class="timer-btn" style="background:#333" onclick="resetPomodoro()">Pausar</button>
+            </div>
+        </div>
+
+        <!-- 4. PASSWORD -->
+        <div class="modal-container" id="passModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-prod)">Gerador de Senha</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="pass-display" id="passResult" style="background:#000; padding:15px; text-align:center; border-radius:8px; font-family:monospace; word-break:break-all; margin-bottom:10px; color:var(--color-prod)">...</div>
+            <button class="btn-tool" style="background:var(--color-prod)" onclick="generatePassword()">Gerar Nova</button>
+        </div>
+
+        <!-- 5. TODO LIST -->
+        <div class="modal-container" id="todoModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-prod)">Tarefas</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div style="display:flex; gap:5px;">
+                <input type="text" id="todoInput" placeholder="Nova tarefa..." style="margin:0;">
+                <button onclick="addTodo()" style="background:var(--color-prod); border:none; color:white; padding:0 15px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div id="todoList" style="margin-top:15px; max-height:200px; overflow-y:auto;"></div>
+        </div>
+
+        <!-- 6. CLIMA (API) -->
+        <div class="modal-container" id="weatherModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-personal)">Clima Agora</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="weather-box">
+                <i class="fa-solid fa-spinner fa-spin fa-2x" id="weatherIcon" style="color:white;"></i>
+                <div class="weather-temp" id="weatherTemp">--°C</div>
+                <div class="weather-desc" id="weatherDesc">Buscando localização...</div>
+            </div>
+        </div>
+
+        <!-- 7. NOTAS -->
+        <div class="modal-container" id="notesModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-personal)">Anotações</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <textarea class="notes-area" id="notesArea" placeholder="Digite aqui... Salvo automaticamente."></textarea>
+        </div>
+
+        <!-- 8. IMC -->
+        <div class="modal-container" id="imcModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-personal)">Calculadora IMC</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <label>Peso (kg)</label><input type="number" id="imcWeight">
+            <label>Altura (m)</label><input type="number" id="imcHeight" placeholder="Ex: 1.75">
+            <button class="btn-tool" style="background:var(--color-personal)" onclick="calcIMC()">Calcular</button>
+            <div id="imcResult" style="text-align:center; margin-top:15px; font-weight:bold;"></div>
+        </div>
+
+        <!-- 9. IDADE -->
+        <div class="modal-container" id="ageModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-personal)">Calculadora de Idade</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <label>Data de Nascimento</label><input type="date" id="birthDate">
+            <button class="btn-tool" style="background:var(--color-personal)" onclick="calcAge()">Calcular</button>
+            <div id="ageResult" style="text-align:center; margin-top:15px; font-size:1.2rem;"></div>
+        </div>
+
+        <!-- 10. HABITS -->
+        <div class="modal-container" id="habitModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-personal)">Hábitos Diários</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div style="display:flex; gap:5px; margin-bottom:15px;">
+                <input type="text" id="habitInput" placeholder="Novo hábito..." style="margin:0;">
+                <button onclick="addHabit()" style="background:var(--color-personal); border:none; color:white; padding:0 15px; border-radius:8px; cursor:pointer;"><i class="fa-solid fa-plus"></i></button>
+            </div>
+            <div id="habitList"></div>
+            <button onclick="resetHabits()" style="margin-top:15px; width:100%; background:#333; border:none; color:white; padding:10px; border-radius:8px; cursor:pointer;">Reiniciar Dia</button>
+        </div>
+
+        <!-- GAMES START -->
+        
+        <!-- 11. TIC TAC TOE (CORRIGIDO) -->
+        <div class="modal-container" id="tictactoeModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-games)">Jogo da Velha</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <!-- Seletor de Modo -->
+            <select id="tttMode" onchange="initTTT()" style="margin-bottom:15px;">
+                <option value="pvp">Modo: 1x1 (Dois Jogadores)</option>
+                <option value="bot">Modo: Vs Bot (Computador)</option>
+            </select>
+            <div style="text-align:center; margin-bottom:10px;" id="tttStatus">Vez do Jogador X</div>
+            <div class="game-board ttt-grid" id="tttBoard"></div>
+            <button class="btn-tool" style="background:var(--color-games); margin-top:20px;" onclick="initTTT()">Reiniciar</button>
+        </div>
+
+        <!-- 12. RPS -->
+        <div class="modal-container" id="rpsModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-games)">Pedra Papel Tesoura</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="rps-result" id="rpsResult">Escolha sua arma:</div>
+            <div class="rps-choices">
+                <button class="rps-btn" onclick="playRPS('rock')"><i class="fa-solid fa-hand-back-fist"></i></button>
+                <button class="rps-btn" onclick="playRPS('paper')"><i class="fa-solid fa-hand"></i></button>
+                <button class="rps-btn" onclick="playRPS('scissors')"><i class="fa-solid fa-hand-scissors"></i></button>
+            </div>
+        </div>
+
+        <!-- 13. COIN FLIP -->
+        <div class="modal-container" id="coinModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-games)">Cara ou Coroa</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="coin-container">
+                <div class="coin" id="coinEl">
+                    <div class="coin-face coin-front"><i class="fa-solid fa-star"></i></div>
+                    <div class="coin-face coin-back"><i class="fa-solid fa-1"></i></div>
+                </div>
+            </div>
+            <div style="text-align:center; font-weight:bold;" id="coinResult">Role a moeda</div>
+            <button class="btn-tool" style="background:var(--color-games)" onclick="flipCoin()">Girar</button>
+        </div>
+
+        <!-- 14. DICE -->
+        <div class="modal-container" id="diceModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-games)">Dados</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="dice-box" id="diceResult">?</div>
+            <button class="btn-tool" style="background:var(--color-games)" onclick="rollDice()">Jogar Dado</button>
+        </div>
+
+        <!-- 15. REFLEX -->
+        <div class="modal-container" id="reflexModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-games)">Teste de Reflexo</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="reflex-area" id="reflexArea" onclick="handleReflexClick()">
+                Clique para começar
+            </div>
+            <div style="text-align:center; margin-top:10px; font-family:monospace;" id="reflexTimer">Tempo: --ms</div>
+        </div>
+
+        <!-- TOOLS START -->
+
+        <!-- 16. COLOR -->
+        <div class="modal-container" id="colorModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-tools)">Cores</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div style="display:flex; flex-direction:column; align-items:center; gap:15px;">
+                <input type="color" id="colorInput" style="width:100%; height:80px; border:none; cursor:pointer;">
+                <div id="hexDisplay" onclick="copyHex()" style="font-size:1.5rem; font-family:monospace; background:rgba(255,255,255,0.05); padding:10px 20px; border-radius:8px; cursor:pointer; border:1px solid var(--glass-border); transition:0.2s;">#FFFFFF</div>
+            </div>
+        </div>
+
+        <!-- 17. QR CODE -->
+        <div class="modal-container" id="qrModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-tools)">Gerador QR</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <input type="text" id="qrInput" placeholder="URL ou Texto..." oninput="generateQR()">
+            <div class="qr-display"><img id="qrImg" src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=Exemplo" alt="QR Code"></div>
+        </div>
+
+        <!-- 18. UNIT CONVERTER -->
+        <div class="modal-container" id="unitModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-tools)">Conversor</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <select id="unitType" onchange="setupUnit()">
+                <option value="length">Comprimento</option>
+                <option value="weight">Peso</option>
+            </select>
+            <div class="unit-row">
+                <input type="number" id="unitInput" oninput="convertUnit()">
+                <select id="unitFrom"></select>
+            </div>
+            <div class="unit-row">
+                <input type="number" id="unitOutput" readonly>
+                <select id="unitTo"></select>
+            </div>
+        </div>
+
+        <!-- 19. CURRENCY (FIXED) -->
+        <div class="modal-container" id="currencyModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-tools)">Conversor de Moeda</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <div class="unit-row">
+                <input type="number" id="currAmount" value="1" oninput="convertCurrency()">
+                <select id="currFrom" onchange="convertCurrency()">
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="BRL">BRL</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                    <option value="CAD">CAD</option>
+                </select>
+            </div>
+            <div class="unit-row">
+                <input type="number" id="currOutput" readonly>
+                <select id="currTo" onchange="convertCurrency()">
+                    <option value="BRL">BRL</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                    <option value="JPY">JPY</option>
+                    <option value="CAD">CAD</option>
+                </select>
+            </div>
+            <div id="currRate" style="text-align:center; font-size:0.8rem; color:var(--text-muted); margin-top:10px;">Buscando taxa...</div>
+        </div>
+
+        <!-- 20. TEXT CASE -->
+        <div class="modal-container" id="textModal">
+            <div class="modal-header"><div class="modal-title" style="color:var(--color-tools)">Texto</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
+            <textarea id="textCaseInput" class="notes-area" oninput="updateTextCase()"></textarea>
+            <div style="display:flex; gap:5px;">
+                <button class="btn-tool" style="background:var(--color-tools)" onclick="setCase('upper')">MAIÚSCULO</button>
+                <button class="btn-tool" style="background:#333" onclick="setCase('lower')">minúsculo</button>
+                <button class="btn-tool" style="background:#555" onclick="setCase('title')">Título</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* --- BACKGROUND CONNECTION --- */
+        const savedBg = localStorage.getItem('ldx_custom_bg');
+        const savedType = localStorage.getItem('ldx_bg_type');
+        const customBgLayer = document.getElementById('custom-bg-layer');
+
+        if (savedBg && savedType === 'image') {
+            customBgLayer.style.backgroundImage = `url('${savedBg}')`;
+            document.body.classList.add('has-custom-bg');
+        }
+
+        /* --- MODAL SYSTEM --- */
+        const overlay = document.getElementById('modalOverlay');
+        function openModal(id) { overlay.classList.add('active'); document.getElementById(id).classList.add('active-modal'); 
+            if(id==='weatherModal') getWeather(); if(id==='todoModal') renderTodos(); if(id==='habitModal') renderHabits(); if(id==='tictactoeModal') initTTT();
+        }
+        function closeModal() { overlay.classList.remove('active'); document.querySelectorAll('.modal-container').forEach(m => m.classList.remove('active-modal')); }
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
+
+        /* --- 1. CALC --- */
+        let cVal = '0'; const cScr = document.getElementById('calcScreen');
+        function calcInput(v) { if(v==='C') cVal='0'; else if(v==='back') { cVal = cVal.slice(0,-1)||'0'; } else { cVal = cVal==='0' && v!=='.' ? v : cVal+v; } cScr.textContent = cVal; }
+        function calcResult() { try { cVal = String(eval(cVal)); cScr.textContent = cVal; } catch { cScr.textContent = 'Erro'; cVal='0'; } }
+
+        /* --- 2. STOPWATCH --- */
+        let swInt, swSec=0, swRun=false;
+        function toggleStopwatch() {
+            if(swRun) { clearInterval(swInt); document.getElementById('swStart').textContent="Continuar"; document.getElementById('swStart').style.background="#333"; }
+            else { swInt=setInterval(()=>{ swSec++; document.getElementById('stopwatchDisplay').textContent=formatTime(swSec); },1000); document.getElementById('swStart').textContent="Pausar"; document.getElementById('swStart').style.background="#ef4444"; }
+            swRun=!swRun;
+        }
+        function resetStopwatch() { clearInterval(swInt); swRun=false; swSec=0; document.getElementById('stopwatchDisplay').textContent="00:00:00"; document.getElementById('swStart').textContent="Iniciar"; document.getElementById('swStart').style.background="var(--color-prod)"; }
+        function formatTime(s) { return new Date(s*1000).toISOString().substr(11,8); }
+
+        /* --- 3. POMODORO --- */
+        let pInt, pTime=1500, pRun=false;
+        function togglePomodoro() {
+            if(pRun) { clearInterval(pInt); document.getElementById('pomoStart').textContent="Focar"; document.getElementById('pomoStart').style.background="var(--color-prod)"; }
+            else { pInt=setInterval(()=>{ pTime--; document.getElementById('pomoDisplay').textContent=new Date(pTime*1000).toISOString().substr(14,5); if(pTime<=0) clearInterval(pInt); },1000); document.getElementById('pomoStart').textContent="Pausar"; document.getElementById('pomoStart').style.background="#ef4444"; }
+            pRun=!pRun;
+        }
+        function resetPomodoro() { clearInterval(pInt); pRun=false; pTime=1500; document.getElementById('pomoDisplay').textContent="25:00"; document.getElementById('pomoStart').textContent="Focar"; }
+
+        /* --- 4. PASSWORD --- */
+        function generatePassword() { let p=""; const c="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*"; for(let i=0;i<16;i++) p+=c.charAt(Math.floor(Math.random()*c.length)); document.getElementById('passResult').textContent=p; } generatePassword();
+
+        /* --- 5. TODO --- */
+        let todos = JSON.parse(localStorage.getItem('ldx_todos'))||[];
+        function addTodo() { const t = document.getElementById('todoInput').value; if(t) { todos.push({text:t, done:false}); saveTodos(); renderTodos(); document.getElementById('todoInput').value=''; } }
+        function toggleTodo(i) { todos[i].done=!todos[i].done; saveTodos(); renderTodos(); }
+        function delTodo(i) { todos.splice(i,1); saveTodos(); renderTodos(); }
+        function saveTodos() { localStorage.setItem('ldx_todos', JSON.stringify(todos)); }
+        function renderTodos() { const l=document.getElementById('todoList'); l.innerHTML=''; todos.forEach((t,i)=> { l.innerHTML+=`<div class="todo-item"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${i})"><span class="todo-text" style="${t.done?'text-decoration:line-through;color:#666':''}">${t.text}</span><i class="fa-solid fa-trash todo-del" onclick="delTodo(${i})"></i></div>`; }); }
+
+        /* --- 6. WEATHER --- */
+        function getWeather() {
+            const t=document.getElementById('weatherTemp'); const d=document.getElementById('weatherDesc');
+            navigator.geolocation.getCurrentPosition(
+                pos => { fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`).then(res=>res.json()).then(data => { t.textContent=Math.round(data.current_weather.temperature)+"°C"; d.textContent="Vento: "+data.current_weather.windspeed+"km/h"; }); },
+                err => { fetch(`https://api.open-meteo.com/v1/forecast?latitude=-23.55&longitude=-46.63&current_weather=true`).then(res=>res.json()).then(data => { t.textContent=Math.round(data.current_weather.temperature)+"°C"; d.textContent="São Paulo (Padrão)"; }); }
+            );
+        }
+
+        /* --- 7. NOTES --- */
+        const nA=document.getElementById('notesArea'); nA.value=localStorage.getItem('ldx_notes')||''; nA.addEventListener('input',()=>localStorage.setItem('ldx_notes', nA.value));
+
+        /* --- 8. IMC --- */
+        function calcIMC() { const w=parseFloat(document.getElementById('imcWeight').value); const h=parseFloat(document.getElementById('imcHeight').value); if(w&&h) { const r=(w/(h*h)).toFixed(1); let s=''; if(r<18.5)s='Abaixo do peso'; else if(r<24.9)s='Peso normal'; else if(r<29.9)s='Sobrepeso'; else s='Obesidade'; document.getElementById('imcResult').innerHTML=`IMC: ${r}<br><span style="font-size:0.8rem;color:var(--color-personal)">${s}</span>`; } }
+
+        /* --- 9. AGE --- */
+        function calcAge() { const b=new Date(document.getElementById('birthDate').value); const diff=Date.now()-b.getTime(); const ageDate=new Date(diff); document.getElementById('ageResult').textContent=Math.abs(ageDate.getUTCFullYear()-1970) + " Anos"; }
+
+        /* --- 10. HABITS --- */
+        let habits = JSON.parse(localStorage.getItem('ldx_habits'))||[];
+        function addHabit() { const h=document.getElementById('habitInput').value; if(h) { habits.push({text:h, done:false}); saveHabits(); renderHabits(); document.getElementById('habitInput').value=''; } }
+        function toggleHabit(i) { habits[i].done=!habits[i].done; saveHabits(); renderHabits(); }
+        function delHabit(i) { habits.splice(i,1); saveHabits(); renderHabits(); }
+        function resetHabits() { habits.forEach(h=>h.done=false); saveHabits(); renderHabits(); }
+        function saveHabits() { localStorage.setItem('ldx_habits', JSON.stringify(habits)); }
+        function renderHabits() { const l=document.getElementById('habitList'); l.innerHTML=''; habits.forEach((h,i)=> { l.innerHTML+=`<div class="todo-item"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHabit(${i})"><span class="todo-text" style="${h.done?'text-decoration:line-through;color:var(--color-personal)':''}">${h.text}</span><i class="fa-solid fa-trash todo-del" onclick="delHabit(${i})"></i></div>`; }); }
+
+        /* --- GAMES LOGIC (CORRIGIDO) --- */
+        
+        /* 11. TIC TAC TOE (NOVA LÓGICA) */
+        let board = ['', '', '', '', '', '', '', '']; 
+        let currentPlayer = 'X'; 
+        let gameActive = true;
+        let gameMode = 'pvp'; 
+
+        const winningConditions = [ [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6] ];
+
+        function initTTT() {
+            gameMode = document.getElementById('tttMode').value;
+            board = ['', '', '', '', '', '', '', ''];
+            gameActive = true;
+            currentPlayer = 'X';
+            document.getElementById('tttStatus').textContent = "Vez do Jogador X";
+            renderTTTBoard();
+        }
+
+        function renderTTTBoard() {
+            const container = document.getElementById('tttBoard');
+            container.innerHTML = '';
+            board.forEach((cell, index) => {
+                const cellDiv = document.createElement('div');
+                cellDiv.classList.add('ttt-cell');
+                cellDiv.textContent = cell;
+                cellDiv.addEventListener('click', () => handleCellClick(index));
+                container.appendChild(cellDiv);
+            });
+        }
+
+        function handleCellClick(index) {
+            if (board[index] !== '' || !gameActive) return;
+
+            updateCell(index, currentPlayer);
+            
+            if (checkWin(currentPlayer)) {
+                document.getElementById('tttStatus').textContent = `Jogador ${currentPlayer} Venceu!`;
+                gameActive = false;
+            } else if (!board.includes('')) {
+                document.getElementById('tttStatus').textContent = "Empate!";
+                gameActive = false;
+            } else {
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                document.getElementById('tttStatus').textContent = gameMode === 'bot' && currentPlayer === 'O' ? "Vez do Bot..." : `Vez do Jogador ${currentPlayer}`;
+                
+                if (gameMode === 'bot' && currentPlayer === 'O' && gameActive) {
+                    setTimeout(botMove, 500);
+                }
+            }
+            renderTTTBoard();
+        }
+
+        function updateCell(index, player) { board[index] = player; }
+
+        function checkWin(player) {
+            return winningConditions.some(condition => { return condition.every(index => board[index] === player); });
+        }
+
+        function botMove() {
+            if (!gameActive) return;
+            let availableIndices = board.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+            if (availableIndices.length > 0) {
+                let randomMove = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+                handleCellClick(randomMove);
+            }
+        }
+
+        /* 12. RPS */
+        function playRPS(u) { const c=['rock','paper','scissors'][Math.floor(Math.random()*3)]; let r='Empate!'; const map={rock:'Pedra', paper:'Papel', scissors:'Tesoura'}; if(u==='rock' && c==='scissors' || u==='paper' && c==='rock' || u==='scissors' && c==='paper') r='Você Venceu!'; else if(u!==c) r='CPU Venceu!'; document.getElementById('rpsResult').innerHTML = `Você: ${map[u]}<br>CPU: ${map[c]}<br><span style="color:var(--color-games)">${r}</span>`; }
+
+        /* 13. COIN */
+        let flippin=false;
+        function flipCoin() { if(flippin) return; flippin=true; const c=document.getElementById('coinEl'); const r=Math.random()<0.5; c.style.transform=`rotateY(${r?0:180}deg)`; setTimeout(()=>{ document.getElementById('coinResult').textContent=r?"Cara!":"Coroa!"; flippin=false; }, 1000); }
+
+        /* 14. DICE */
+        function rollDice() { const n=Math.floor(Math.random()*6)+1; const faces=['⚀','⚁','⚂','⚃','⚄','⚅']; document.getElementById('diceResult').textContent=faces[n-1]; }
+
+        /* 15. REFLEX */
+        let rState=0; let rStart=0;
+        function handleReflexClick() {
+            const a=document.getElementById('reflexArea');
+            if(rState===0) { a.className="reflex-area waiting"; a.textContent="Espere ficar Verde..."; rState=1; const t=1000+Math.random()*3000; setTimeout(()=>{ if(rState===1){ rState=2; rStart=Date.now(); a.className="reflex-area now"; a.textContent="AGORA!"; } }, t); }
+            else if(rState===1) { a.className="reflex-area"; a.textContent="Muito cedo! Clique para tentar de novo."; rState=0; }
+            else if(rState===2) { const t=Date.now()-rStart; document.getElementById('reflexTimer').textContent=`Tempo: ${t}ms`; a.className="reflex-area"; a.textContent="Clique para tentar de novo."; rState=0; }
+        }
+
+        /* --- TOOLS LOGIC --- */
+        
+        /* 16. COLOR */
+        const cIn=document.getElementById('colorInput'); const hDisp=document.getElementById('hexDisplay');
+        cIn.addEventListener('input',()=>hDisp.textContent=cIn.value.toUpperCase());
+        function copyHex() { navigator.clipboard.writeText(hDisp.textContent); hDisp.textContent="Copiado!"; setTimeout(()=>hDisp.textContent=cIn.value.toUpperCase(),1000); }
+
+        /* 17. QR */
+        function generateQR() { const txt=document.getElementById('qrInput').value||'Exemplo'; document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(txt)}`; }
+
+        /* 18. UNIT */
+        const rates = { length:{m:1,km:0.001,cm:100,mm:1000,ft:3.28084,in:39.3701}, weight:{kg:1,g:1000,lb:2.20462,oz:35.274} };
+        const units = { length:['m','km','cm','mm','ft','in'], weight:['kg','g','lb','oz'] };
+        function setupUnit() {
+            const t=document.getElementById('unitType').value; const u=units[t];
+            const s=u.map(x=>`<option value="${x}">${x}</option>`).join('');
+            document.getElementById('unitFrom').innerHTML=s;
+            document.getElementById('unitTo').innerHTML=s;
+            document.getElementById('unitTo').selectedIndex=1;
+            convertUnit();
+        }
+        function convertUnit() {
+            const t=document.getElementById('unitType').value; const v=parseFloat(document.getElementById('unitInput').value)||0;
+            const f=document.getElementById('unitFrom').value; const to=document.getElementById('unitTo').value;
+            const base = v / rates[t][f];
+            document.getElementById('unitOutput').value = (base * rates[t][to]).toFixed(4);
+        }
+        setupUnit();
+
+        /* 19. CURRENCY (FIXED API) */
+        async function convertCurrency() {
+            const amt = parseFloat(document.getElementById('currAmount').value);
+            const from = document.getElementById('currFrom').value;
+            const to = document.getElementById('currTo').value;
+            const resEl = document.getElementById('currOutput');
+            const rateEl = document.getElementById('currRate');
+
+            if (from === to) { resEl.value = amt; rateEl.textContent = "Taxa: 1:1"; return; }
+
+            rateEl.textContent = "Buscando...";
+            try {
+                const res = await fetch(`https://api.frankfurter.app/latest?amount=${amt}&from=${from}&to=${to}`);
+                const data = await res.json();
+                if (data.error) throw new Error('Pair não suportado');
+                resEl.value = data.rates[to].toFixed(2);
+                rateEl.textContent = `1 ${from} = ${(data.rates[to]/amt).toFixed(4)} ${to}`;
+            } catch (e) {
+                const fallback = { 'USD-EUR': 0.92, 'EUR-USD': 1.08, 'USD-BRL': 5.0, 'BRL-USD': 0.20, 'EUR-BRL': 5.4, 'BRL-EUR': 0.18 }; 
+                const key = `${from}-${to}`;
+                const rate = fallback[key] || 1; 
+                resEl.value = (amt * rate).toFixed(2);
+                rateEl.textContent = "Modo Offline (Aproximado)";
+            }
+        }
+        convertCurrency();
+
+        /* 20. TEXT */
+        function setCase(c) {
+            const i=document.getElementById('textCaseInput');
+            if(c==='upper') i.value=i.value.toUpperCase();
+            if(c==='lower') i.value=i.value.toLowerCase();
+            if(c==='title') i.value=i.value.toLowerCase().replace(/\b\w/g, s=>s.toUpperCase());
+        }
+
+        /* --- LOGICA DE PESQUISA (WEB & LOCAL) --- */
+        const engines = {
+            google: { name: 'Google', url: 'https://www.google.com.br/search?q=', icon: 'fa-brands fa-google icon-google' },
+            bing: { name: 'Bing', url: 'https://www.bing.com.br/search?q=', icon: 'fa-brands fa-microsoft icon-bing' },
+            duckduckgo: { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=', icon: 'fa-solid fa-shield-cat icon-ddg' },
+            youtube: { name: 'YouTube', url: 'https://www.youtube.com.br/results?search_query=', icon: 'fa-brands fa-youtube icon-youtube' },
+            spotify: { name: 'Spotify', url: 'https://open.spotify.com/search/', icon: 'fa-brands fa-spotify icon-spotify' },
+            reddit: { name: 'Reddit', url: 'https://www.reddit.com.br/search/?q=', icon: 'fa-brands fa-reddit icon-reddit' },
+            amazon: { name: 'Amazon', url: 'https://www.amazon.com.br/s?k=', icon: 'fa-brands fa-amazon icon-amazon' },
+            wikipedia: { name: 'Wikipedia', url: 'https://pt.wikipedia.org/wiki/Special:Search?search=', icon: 'fa-brands fa-wikipedia-w icon-wiki' }
+        };
+
+        let currentEngine = 'google';
+        const engineBtn = document.getElementById('engineBtn');
+        const engineDropdown = document.getElementById('engineDropdown');
+        const engineIcon = document.getElementById('currentEngineIcon');
+        const engineName = document.getElementById('currentEngineName');
+        const searchInput = document.getElementById('searchInput');
+        const searchForm = document.getElementById('searchForm');
+        const searchHistory = document.getElementById('searchHistory');
+        const historyList = document.getElementById('historyList');
+
+        /* --- LÓGICA AVANÇADA DE FILTRAGEM --- */
+        const cards = document.querySelectorAll('.card');
+        const headers = document.querySelectorAll('.section-header');
+
+        function filterCards() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const activeCategory = document.querySelector('#catDropdown .dropdown-option.selected').dataset.catFilter;
+
+            cards.forEach(card => card.style.display = 'none');
+            headers.forEach(header => header.style.display = 'none');
+
+            const visibleCategories = new Set();
+
+            cards.forEach(card => {
+                const title = card.querySelector('h3').innerText.toLowerCase();
+                const category = card.dataset.cat;
+
+                const matchesCategory = activeCategory === 'all' || category === activeCategory;
+                const matchesSearch = title.includes(searchTerm);
+
+                if (matchesCategory && matchesSearch) {
+                    card.style.display = 'flex';
+                    visibleCategories.add(category);
+                }
+            });
+
+            if (visibleCategories.size > 0) {
+                headers.forEach(header => {
+                    if (header.classList.contains('header-prod') && visibleCategories.has('prod')) header.style.display = 'flex';
+                    if (header.classList.contains('header-personal') && visibleCategories.has('personal')) header.style.display = 'flex';
+                    if (header.classList.contains('header-games') && visibleCategories.has('games')) header.style.display = 'flex';
+                    if (header.classList.contains('header-tools') && visibleCategories.has('tools')) header.style.display = 'flex';
+                });
+            }
+        }
+
+        const catBtn = document.getElementById('catBtn');
+        const catDropdown = document.getElementById('catDropdown');
+        const catOptions = document.querySelectorAll('#catDropdown .dropdown-option');
+
+        catBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            catDropdown.classList.toggle('active');
+        });
+
+        catOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                catOptions.forEach(o => o.classList.remove('selected'));
+                opt.classList.add('selected');
+                filterCards();
+                catDropdown.classList.remove('active');
+            });
+        });
+
+        searchInput.addEventListener('input', filterCards);
+
+        // --- LÓGICA RESTANTE DA PESQUISA (Web) ---
+        engineBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            engineDropdown.classList.toggle('active');
+        });
+
+        document.querySelectorAll('.engine-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const engineKey = option.getAttribute('data-engine');
+                const data = engines[engineKey];
+                currentEngine = engineKey;
+                engineIcon.className = data.icon;
+                engineName.textContent = data.name;
+                document.querySelectorAll('.engine-option').forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                engineDropdown.classList.remove('active');
+                searchInput.focus();
+            });
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!engineBtn.contains(e.target)) engineDropdown.classList.remove('active');
+            if (!searchInput.contains(e.target) && !searchHistory.contains(e.target)) searchHistory.classList.remove('active');
+            if (!catBtn.contains(e.target) && !catDropdown.contains(e.target)) catDropdown.classList.remove('active');
+        });
+
+        const storageKey = 'vertexHub_history_v2';
+        let searches = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+        function renderHistory() {
+            historyList.innerHTML = '';
+            if (searches.length === 0) {
+                searchHistory.style.display = 'none';
+                return;
+            }
+            searches.slice(0, 5).reverse().forEach(term => {
+                const div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> ${term}`;
+                div.addEventListener('click', () => {
+                    searchInput.value = term;
+                    filterCards();
+                    searchHistory.classList.remove('active');
+                });
+                historyList.appendChild(div);
+            });
+        }
+
+        function saveToHistory(term) {
+            if (!term || term.trim() === '') return;
+            term = term.trim();
+            searches = searches.filter(s => s.toLowerCase() !== term.toLowerCase());
+            searches.push(term);
+            if (searches.length > 10) searches.shift(); 
+            localStorage.setItem(storageKey, JSON.stringify(searches));
+            renderHistory();
+        }
+
+        searchInput.addEventListener('focus', () => {
+            renderHistory();
+            if (searches.length > 0) searchHistory.classList.add('active');
+        });
+
+        function performSearch(query) {
+            if (query) {
+                const url = engines[currentEngine].url + encodeURIComponent(query);
+                saveToHistory(query);
+                window.open(url, '_blank');
+            }
+        }
+
+        searchForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            performSearch(searchInput.value);
+        });
+
+        const voiceBtn = document.getElementById('voiceBtn');
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'pt-BR';
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            voiceBtn.addEventListener('click', () => {
+                recognition.start();
+                voiceBtn.classList.add('listening');
+            });
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                searchInput.value = transcript;
+                filterCards();
+                voiceBtn.classList.remove('listening');
+            };
+            recognition.onerror = () => { voiceBtn.classList.remove('listening'); };
+            recognition.onend = () => { voiceBtn.classList.remove('listening'); };
+        } else {
+            voiceBtn.style.display = 'none'; 
+        }
+
+        /* --- CONTROLE DE GRID (MOBILE E PC) --- */
+        const gridBtn = document.getElementById('gridBtn');
+        const gridDropdown = document.getElementById('gridDropdown');
+        const gridOptions = document.querySelectorAll('#gridDropdown .dropdown-option');
+        const bentoGrid = document.getElementById('bentoGrid');
+
+        gridBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            gridDropdown.classList.toggle('active');
+        });
+
+        gridOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                const cols = option.getAttribute('data-cols');
+                applyGrid(cols);
+                gridOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                gridDropdown.classList.remove('active');
+            });
+        });
+
+        function applyGrid(cols) {
+            bentoGrid.classList.remove('cols-2', 'cols-3', 'cols-5');
+            if (cols === 'auto') {
+                bentoGrid.style.gridTemplateColumns = '';
+                saveGridPreference('auto');
+            } else {
+                bentoGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                if(cols != 'auto') bentoGrid.classList.add(`cols-${cols}`);
+                saveGridPreference(cols);
+            }
+        }
+
+        function saveGridPreference(value) {
+            if (window.innerWidth <= 600) localStorage.setItem('vertexHub_mobileCols', value);
+            else localStorage.setItem('vertexHub_desktopCols', value);
+        }
+
+        function loadSavedGrid() {
+            let savedCols;
+            let key;
+            if (window.innerWidth <= 600) {
+                key = 'vertexHub_mobileCols';
+                savedCols = localStorage.getItem(key);
+                if(!savedCols) savedCols = '2';
+            } else {
+                key = 'vertexHub_desktopCols';
+                savedCols = localStorage.getItem(key);
+                if(!savedCols) savedCols = 'auto';
+            }
+            const optToSelect = document.querySelector(`#gridDropdown .dropdown-option[data-cols="${savedCols}"]`);
+            if(optToSelect) optToSelect.classList.add('selected');
+            applyGrid(savedCols);
+        }
+        loadSavedGrid();
+
+        let lastWidth = window.innerWidth;
+        window.addEventListener('resize', () => {
+            if (window.innerWidth !== lastWidth) {
+                lastWidth = window.innerWidth;
+                loadSavedGrid();
+            }
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!gridBtn.contains(e.target) && !gridDropdown.contains(e.target)) {
+                gridDropdown.classList.remove('active');
+            }
+        });
+
+        /* --- TILT 3D --- */
+        document.querySelectorAll('.card').forEach(c => {
+            c.addEventListener('mousemove',e=>{
+                if(window.innerWidth>768){
+                    const r=c.getBoundingClientRect();
+                    const x=e.clientX-r.left-r.width/2; const y=e.clientY-r.top-r.height/2;
+                    c.style.transform=`perspective(1000px) rotateX(${y/-15}deg) rotateY(${x/15}deg) scale(1.02)`;
+                }
+            });
+            c.addEventListener('mouseleave',()=>c.style.transform='perspective(1000px) rotateX(0) rotateY(0) scale(1)');
+        });
+
+        /* --- EFEITO RIPPLE DE CLIQUE --- */
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                if(e.button === 0) {
+                    e.preventDefault();
+                    this.classList.add('clicked');
+                    const ripple = document.createElement('span');
+                    ripple.classList.add('ripple');
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const size = Math.max(rect.width, rect.height);
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${x - size / 2}px`;
+                    ripple.style.top = `${y - size / 2}px`;
+                    card.appendChild(ripple);
+                    setTimeout(() => { ripple.remove(); }, 600);
+                    setTimeout(() => { this.classList.remove('clicked'); }, 200);
+                    if(this.getAttribute('onclick')) eval(this.getAttribute('onclick'));
+                }
+            });
+        });
+    </script>
+</body>
+</html>
