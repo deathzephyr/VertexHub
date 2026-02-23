@@ -16,7 +16,6 @@
         /* --- DESIGN SYSTEM (INTEGRADO PORTAISLDX) --- */
         :root {
             --bg-dark: #050507;
-            /* Glass mais forte para melhor integração com o fundo do Portal */
             --glass-bg: rgba(15, 15, 20, 0.55); 
             --glass-border: rgba(255, 255, 255, 0.12);
             --glass-highlight: rgba(255, 255, 255, 0.05);
@@ -67,7 +66,7 @@
             background-position: center;
             background-repeat: no-repeat;
             opacity: 0;
-            transition: opacity 0.5s ease;
+            transition: opacity 0.5s ease, background-image 0.5s ease;
             pointer-events: none;
         }
 
@@ -934,43 +933,63 @@
     </div>
 
     <script>
-        /* --- SISTEMA DE CONEXÃO COM PORTAISLDX (BACKGROUND SYNC) --- */
-        const savedBg = localStorage.getItem('ldx_custom_bg');
-        const savedType = localStorage.getItem('ldx_bg_type');
+        /* --- SISTEMA DE SINCRONIZAÇÃO FORÇADA (PORTAISLDX) --- */
         const customBgLayer = document.getElementById('custom-bg-layer');
-
-        function applyBackground() {
-            // Se houver um fundo personalizado salvo no Portal, usa ele
-            if (savedBg && savedType === 'image') {
-                customBgLayer.style.backgroundImage = `url('${savedBg}')`;
-            } else {
-                // Se não, usa o padrão img2.jpeg
-                customBgLayer.style.backgroundImage = `url('img2.jpeg')`;
-            }
-            // Ativa a classe que esconde as luzes ambiente e mostra a imagem de fundo
-            document.body.classList.add('has-custom-bg');
-        }
         
-        // Inicializa
-        applyBackground();
+        // Variável para rastrear qual imagem está atualmente na tela
+        let currentActiveBg = 'img2.jpeg'; 
 
-        // Escuta mudanças em tempo real (Sync entre abas)
+        function syncBackground() {
+            const savedBg = localStorage.getItem('ldx_custom_bg');
+            const savedType = localStorage.getItem('ldx_bg_type');
+
+            // Define o valor que queremos usar (do Portal ou Padrão)
+            let targetBg = 'img2.jpeg'; // Padrão
+            let isImageType = false;
+
+            if (savedBg && savedType === 'image') {
+                targetBg = savedBg;
+                isImageType = true;
+            }
+
+            // Só atualiza se o valor for diferente do que está na tela
+            if (currentActiveBg !== targetBg) {
+                currentActiveBg = targetBg;
+                
+                // Prepara a URL com anti-cache (Cache Buster)
+                let finalUrl = targetBg;
+                
+                // Se NÃO for Base64 (não começa com data:), adiciona timestamp para forçar atualização
+                // Isso resolve o problema de trocar a imagem com o mesmo nome
+                if (!targetBg.startsWith('data:')) {
+                    const sep = targetBg.includes('?') ? '&' : '?';
+                    finalUrl = targetBg + sep + new Date().getTime();
+                }
+
+                // Aplica a imagem
+                customBgLayer.style.backgroundImage = `url('${finalUrl}')`;
+                
+                // Ativa o modo de fundo personalizado (esconde luzes)
+                document.body.classList.add('has-custom-bg');
+                
+                // Debug (opcional)
+                console.log("VertexHub: Fundo atualizado para", targetBg);
+            }
+        }
+
+        // 1. Executa imediatamente ao carregar
+        syncBackground();
+
+        // 2. Listener para atualizações em outras abas (Padrão)
         window.addEventListener('storage', (e) => {
             if (e.key === 'ldx_custom_bg' || e.key === 'ldx_bg_type') {
-                const newBg = localStorage.getItem('ldx_custom_bg');
-                const newType = localStorage.getItem('ldx_bg_type');
-                
-                if (newBg && newType === 'image') {
-                    customBgLayer.style.backgroundImage = `url('${newBg}')`;
-                } else {
-                    // Se remover o background no Portal, volta para o padrão img2.jpeg
-                    customBgLayer.style.backgroundImage = `url('img2.jpeg')`;
-                }
-                
-                // Garante que a imagem continue visível
-                document.body.classList.add('has-custom-bg');
+                syncBackground();
             }
         });
+
+        // 3. POLLING (Loop de verificação) - GARANTE atualização mesmo se o evento falhar
+        // Verifica a cada 500ms se mudou algo no localStorage
+        setInterval(syncBackground, 500);
 
         /* --- SISTEMA DE MODAIS --- */
         const overlay = document.getElementById('modalOverlay');
