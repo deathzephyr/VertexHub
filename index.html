@@ -13,30 +13,36 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- DESIGN SYSTEM (INTEGRADO PORTAISLDX) --- */
+        /* --- DESIGN SYSTEM (BASEADO NO GAMEHUB) --- */
         :root {
             --bg-dark: #050507;
-            --glass-bg: rgba(15, 15, 20, 0.55); 
-            --glass-border: rgba(255, 255, 255, 0.12);
-            --glass-highlight: rgba(255, 255, 255, 0.05);
-            
-            /* Cores LDX */
+            --glass-bg: rgba(20, 20, 25, 0.6); 
+            --glass-border: rgba(255, 255, 255, 0.1);
             --accent-primary: #8b5cf6; 
             --accent-secondary: #ec4899; 
             --accent-cyan: #06b6d4; 
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
             
-            /* Cores das Marcas */
-            --color-google: #EA4335; --color-youtube: #FF0000; --color-bing: #008373;
-            --color-amazon: #FF9900; --color-reddit: #FF4500; --color-wiki: #FFFFFF;
-            --color-spotify: #1DB954; --color-shopee: #ee4d2d; --color-discord: #5865F2;
-            --color-whatsapp: #25D366; --color-tiktok: #ff0050; --color-netflix: #E50914;
-            --color-globo: #00AEEF; --color-uol: #0054A6;
+            /* Cores das Marcas (CentralHub) */
+            --color-google: #EA4335;
+            --color-youtube: #FF0000;
+            --color-bing: #008373;
+            --color-amazon: #FF9900;
+            --color-reddit: #FF4500;
+            --color-wiki: #FFFFFF;
+            --color-spotify: #1DB954;
+            --color-shopee: #ee4d2d;   
+            --color-discord: #5865F2;  
+            --color-whatsapp: #25D366; 
+            --color-tiktok: #ff0050;   
+            --color-netflix: #E50914;  
+            --color-globo: #00AEEF;    
+            --color-uol: #0054A6;      
 
-            /* Cores das Categorias UtilityHub */
+            /* Cores das Categorias UtilityHub (Vertex) */
             --color-prod: #3b82f6;      /* Azul */
             --color-personal: #ec4899;   /* Rosa */
             --color-games: #a855f7;     /* Roxo */
@@ -57,47 +63,21 @@
 
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
-        /* --- BACKGROUND LAYER SYSTEM (CONEXÃO LDX) --- */
+        /* --- BACKGROUND SYSTEM (IDENTICO AO GAMEHUB) --- */
+        /* Única Camada de Fundo (Padrão img2.jpeg ou Customizado) */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
-            z-index: -2;
+            z-index: -1;
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            opacity: 0;
-            transition: opacity 0.5s ease, background-image 0.5s ease;
+            /* FUNDO PADRÃO: img2.jpeg */
+            background-image: url('img2.jpeg');
+            opacity: 1;
+            transition: background-image 0.5s ease, opacity 0.5s ease;
             pointer-events: none;
         }
-
-        body.has-custom-bg .ambient-light { opacity: 0; transition: opacity 0.5s ease; }
-        body.has-custom-bg #custom-bg-layer { opacity: 1; }
-
-        /* --- BACKGROUND AMBIENTE (SINCRONIZADO LDX) --- */
-        .ambient-light {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            overflow: hidden;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
-        }
-
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.5;
-            animation: floatOrb 25s infinite alternate ease-in-out;
-        }
-        
-        /* Cores baseadas no tema LDX */
-        .orb-1 { width: 500px; height: 500px; background: var(--accent-primary); top: -150px; left: -150px; animation-duration: 30s; }
-        .orb-2 { width: 600px; height: 600px; background: var(--accent-secondary); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
-        .orb-3 { width: 350px; height: 350px; background: var(--accent-cyan); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.3; animation: pulseOrb 12s infinite ease-in-out; }
-
-        @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
-        @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.1); } }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; }
 
@@ -110,7 +90,7 @@
         
         .header-btn {
             background: rgba(255,255,255,0.03);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255,255,255,0.1);
             border-radius: 50%;
             width: 44px; height: 44px;
             display: flex;
@@ -120,28 +100,25 @@
             cursor: pointer;
             transition: all 0.2s;
             text-decoration: none;
-            position: relative;
-            z-index: 10;
-            backdrop-filter: blur(10px);
         }
-        .header-btn:hover { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3); }
+        .header-btn:hover { background: rgba(255,255,255,0.1); color: white; }
         .header-btn i { font-size: 1.1rem; }
 
         .header-dropdown {
             position: absolute;
             top: 120%; right: 0;
-            background: rgba(10, 10, 15, 0.95);
-            backdrop-filter: blur(25px);
+            background: rgba(15, 15, 20, 0.98);
+            backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 8px;
+            border-radius: 12px;
+            padding: 6px;
             width: 160px;
             display: none; 
             flex-direction: column;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             opacity: 0;
             transform: translateY(-10px);
-            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.2s ease;
             z-index: 1000;
         }
         .header-dropdown.active { display: flex; opacity: 1; transform: translateY(0); }
@@ -149,9 +126,7 @@
         .dropdown-option {
             padding: 10px 14px;
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             color: var(--text-muted);
             text-decoration: none;
             transition: 0.2s;
@@ -198,7 +173,7 @@
         
         .search-bar { 
             position: relative; display: flex; align-items: center; 
-            background: rgba(20, 20, 25, 0.6); 
+            background: rgba(20, 20, 25, 0.7); 
             border: 1px solid var(--glass-border); 
             border-radius: 28px; 
             padding: 6px; 
@@ -210,12 +185,11 @@
 
         .search-bar:focus-within { 
             background: rgba(25, 25, 30, 0.85); 
-            border-color: rgba(139, 92, 246, 0.5); 
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15), 0 30px 60px -12px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15); 
+            border-color: rgba(139, 92, 246, 0.4); 
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1), 0 30px 60px -12px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15); 
             transform: translateY(-2px); 
         }
 
-        /* Seletor de Motor */
         .engine-selector { position: relative; margin-right: 5px; flex-shrink: 0; }
         
         .engine-btn {
@@ -224,9 +198,7 @@
             border-radius: 22px;
             height: 48px;
             padding: 0 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             color: var(--text-main);
             cursor: pointer;
             transition: all 0.2s;
@@ -239,11 +211,10 @@
         .engine-btn:hover { background: rgba(255,255,255,0.08); }
         .engine-btn i { font-size: 1.1rem; transition: color 0.3s; }
         
-        /* Dropdown Engine */
         .engine-dropdown {
             position: absolute;
             top: 120%; left: 0;
-            background: rgba(10, 10, 15, 0.98);
+            background: rgba(15, 15, 20, 0.98);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
@@ -263,14 +234,13 @@
         .engine-dropdown::-webkit-scrollbar { width: 6px; }
         .engine-dropdown::-webkit-scrollbar-track { background: transparent; }
         .engine-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
         .engine-dropdown.active { display: flex; opacity: 1; transform: translateY(0); }
         
         .engine-option {
             padding: 10px 14px;
             border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            display: flex; align-items: center; gap: 10px;
             color: var(--text-muted);
             text-decoration: none;
             transition: 0.2s;
@@ -281,13 +251,11 @@
         .engine-option:hover { background: rgba(255,255,255,0.08); color: white; }
         .engine-option.selected { background: rgba(255,255,255,0.05); color: white; font-weight: 500; }
         
-        /* Cores dos Ícones de Busca */
         .icon-google { color: var(--color-google); } .icon-youtube { color: var(--color-youtube); }
         .icon-bing { color: var(--color-bing); } .icon-ddg { color: var(--color-shopee); } 
         .icon-amazon { color: var(--color-amazon); } .icon-reddit { color: var(--color-reddit); }
         .icon-wiki { color: var(--color-wiki); } .icon-spotify { color: var(--color-spotify); }
 
-        /* Input */
         .search-input-container { flex: 1; position: relative; }
         .search-input { 
             width: 100%; background: transparent; border: none; 
@@ -296,7 +264,6 @@
         }
         .search-input::placeholder { color: rgba(255,255,255,0.25); }
 
-        /* Botões de Ação */
         .action-btns { display: flex; align-items: center; gap: 8px; padding-right: 6px; flex-shrink: 0; }
 
         .btn-icon {
@@ -323,7 +290,6 @@
         .btn-submit { background: var(--gradient-primary); color: white; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
         .btn-submit:hover { transform: scale(1.05) rotate(-10deg); box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5); }
 
-        /* Histórico */
         .search-history {
             position: absolute;
             top: 110%; left: 60px; right: 60px;
@@ -363,16 +329,16 @@
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- GRID & SEÇÕES --- */
-        .bento-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 16px; padding-bottom: 5rem; transition: all 0.3s ease; }
+        .bento-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 16px; padding-bottom:5rem; transition: all 0.3s ease; }
         
         .section-header { 
-            grid-column: 1 / -1; 
+            grid-column:1 / -1; 
             display: flex; 
             align-items: center; 
             gap: 1rem; 
             margin: 2.5rem 0 1.5rem 0; 
             padding-bottom: 0.5rem; 
-            border-bottom: 1px solid rgba(255,255,255,0.08); 
+            border-bottom:1px solid rgba(255,255,255,0.08); 
         }
         
         .section-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
@@ -384,9 +350,8 @@
         .header-games .section-title { color: var(--color-games); } .header-games .section-line { background: linear-gradient(to right, var(--color-games), transparent); }
         .header-tools .section-title { color: var(--color-tools); } .header-tools .section-line { background: linear-gradient(to right, var(--color-tools), transparent); }
 
-        /* --- CARDS (QUADRADOS CONECTADOS) --- */
+        /* --- CARDS (PADRÃO GAMEHUB) --- */
         .card {
-            /* Fundo Vidro Reforçado */
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
@@ -394,11 +359,9 @@
             text-decoration: none;
             color: white;
             position: relative;
-            overflow: hidden;
-            /* Aumentado o blur para integração total com o background do Portal */
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            overflow: hidden; 
             transition: transform 0.1s linear, box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
+            backdrop-filter: blur(25px);
             height: 150px;
             display: flex;
             flex-direction: column;
@@ -407,23 +370,48 @@
             transform-style: preserve-3d;
             will-change: transform;
             cursor: pointer;
-            box-shadow: var(--shadow-card);
         }
-        
         .card::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
-            transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 5; 
+            transform: skewX(-25deg); transition: 0.6s; pointer-events: none; 
+            z-index: 5; 
         }
         .card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
-        
-        .card:hover { 
-            background: rgba(30, 30, 35, 0.75); 
-            border-color: rgba(255,255,255,0.4); 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        .card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255,255,0.4); }
+
+        /* --- ESTILOS SINCRONIZADOS (TRANSPARENT E INVISIBLE) --- */
+        body.transparent-mode .card {
+            background: rgba(0, 0, 0, 0.25); 
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+        }
+        body.transparent-mode .card:hover {
+            background: rgba(0, 0, 0, 0.4);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        body.invisible-mode .card {
+            background: transparent;
+            backdrop-filter: none; 
+            border: 1px solid rgba(255, 255, 255, 0.15); 
+            box-shadow: none;
+        }
+        body.invisible-mode .card:hover {
+            background: transparent;
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px rgba(0,0,0,0.5); 
+        }
+        body.invisible-mode .card h3, 
+        body.invisible-mode .card p {
+            text-shadow: 0 2px 10px rgba(0,0,0,0.8);
         }
         
-        .card.clicked { transform: scale(0.95); opacity: 0.8; box-shadow: none; }
+        .card.clicked {
+            transform: scale(0.95);
+            opacity: 0.8;
+            box-shadow: none;
+        }
         
         .ripple {
             position: absolute;
@@ -439,23 +427,96 @@
         .card-bg-icon { position: absolute; right: -10px; bottom: -10px; font-size: 5rem; opacity: 0.04; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .card:hover .card-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.2); }
         .card-content { 
-            position: relative; z-index: 20 !important; transform: translateZ(20px); 
-            display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; 
-            width: 100%; justify-content: center; height: 100%; pointer-events: none; 
+            position: relative; 
+            z-index: 20 !important; 
+            transform: translateZ(20px); 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            text-align: center; 
+            gap: 8px; 
+            width: 100%; 
+            justify-content: center; 
+            height: 100%; 
+            pointer-events: none; 
         }
 
         .card-icon { 
-            width: 42px; height: 42px; aspect-ratio: 1/1; border-radius: 12px; 
-            background: rgba(255,255,255,0.03); display: flex; justify-content: center; align-items: center; 
-            font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; 
-            margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); line-height: 0; position: relative; z-index: 10 !important;
+            width: 42px; 
+            height: 42px; 
+            aspect-ratio: 1/1; 
+            border-radius: 6px; 
+            background: rgba(255,255,255,0.05); 
+            display: flex; justify-content: center; align-items: center; 
+            font-size: 1.1rem; 
+            border:1px solid rgba(255,255,255,0.05); 
+            transition: all 0.3s ease; 
+            margin-bottom: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); line-height: 0; 
+            position: relative; 
+            z-index: 10 !important;
             flex-shrink: 0; 
+            overflow: hidden;
         }
         .card-icon i { display: inline-flex; align-items: center; justify-content: center; margin: 0; vertical-align: middle; }
         
+        .card-icon .fa-solid { font-family: "Font Awesome 6 Free"; font-weight: 900; }
+        .card-icon .fa-brands { font-family: "Font Awesome 6 Brands"; font-weight: 400; }
+
+        /* Ajuste de Ícones Específicos (Do GameHub) */
+        .card-icon .fa-user-secret { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-graduation-cap { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-city { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-car-burst { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-cubes { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-dragon { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-cube { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-person-rifle { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-bullseye { font-size: 1.2rem !important; transform: scale(1.05); } 
+        .card-icon .fa-crosshairs { font-size: 1.2rem !important; transform: scale(1.05); } 
+        .card-icon .fa-shield-halved { font-size: 1.2rem !important; transform: scale(1.05); } 
+        .card-icon .fa-gun { font-size: 1.2rem !important; transform: scale(1.05); } 
+        .card-icon .fa-virus { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-user-tie { font-size: 1.2rem !important; transform: scale(1.05); } 
+        .card-icon .fa-hat-cowboy { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-spray-can { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-mountain { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-flag-checkered { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-gauge-high { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-train { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-stopwatch { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-hand-fist { font-size: 1.3rem !important; transform: scale(1.1); } 
+        .card-icon .fa-ghost { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-microchip { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-gamepad { font-size: 1.25rem !important; transform: scale(1.05); } 
+        .card-icon .fa-futbol { font-size: 1.25rem !important; transform: scale(1.05); }
+
+        /* Ajustes específicos para ícones do VertexHub */
+        .card-icon .fa-calculator { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-stopwatch { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-clock { font-size: 1.25rem !important; transform: scale(1.05); }
+        .card-icon .fa-key { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-list-check { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-cloud-sun { font-size: 1.25rem !important; transform: scale(1.1); }
+        .card-icon .fa-sticky-note { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-weight-scale { font-size: 1.25rem !important; transform: scale(1.05); }
+        .card-icon .fa-cake-candles { font-size: 1.25rem !important; transform: scale(1.05); }
+        .card-icon .fa-repeat { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-x { font-size: 1.3rem !important; transform: scale(1.1); }
+        .card-icon .fa-hand-scissors { font-size: 1.25rem !important; transform: scale(1.05); }
+        .card-icon .fa-coins { font-size: 1.25rem !important; transform: scale(1.05); }
+        .card-icon .fa-dice { font-size: 1.25rem !important; transform: scale(1.05); }
+        .card-icon .fa-bolt { font-size: 1.3rem !important; transform: scale(1.1); }
+        .card-icon .fa-palette { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-qrcode { font-size: 1.3rem !important; transform: scale(1.05); }
+        .card-icon .fa-ruler-combined { font-size: 1.2rem !important; transform: scale(1.05); }
+        .card-icon .fa-money-bill-transfer { font-size: 1.25rem !important; transform: scale(1.05); }
+        .card-icon .fa-font { font-size: 1.25rem !important; transform: scale(1.05); }
+
         .card:hover .card-icon { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.3); transform: translateY(-3px) scale(1.05); box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
-        .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.3px; }
-        .card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; }
+        .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.3px; transition: transform 0.2s; }
+        .card:hover h3 { transform: translateY(-1px); }
+        .card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; font-weight: 500; }
 
         /* Hover Effects */
         .card[data-cat="prod"] .card-icon { color: var(--color-prod); text-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
@@ -469,6 +530,52 @@
         
         .card[data-cat="tools"] .card-icon { color: var(--color-tools); text-shadow: 0 0 15px rgba(245, 158, 11, 0.2); }
         .card[data-cat="tools"]:hover { box-shadow: 0 20px 40px -10px rgba(245, 158, 11, 0.3), 0 0 0 1px rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3); }
+
+        /* --- FOOTER --- */
+        footer { 
+            text-align: center; 
+            padding: 2rem 0; 
+            color: var(--text-muted); 
+            border-top: 1px solid var(--glass-border); 
+            margin-top: 3rem; 
+            font-size: 0.8rem; 
+            letter-spacing: 0.5px; 
+            position: relative; 
+            z-index: 2; 
+            background: transparent; 
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 600px) { 
+            .hero h1 { font-size: 2.4rem; } 
+            .container { padding: 0 1rem; } 
+            .search-wrapper { width: 100%; padding: 0; }
+            .engine-btn { width: 44px; padding: 0; justify-content: center; border-radius: 50%; margin-right: 5px; }
+            #currentEngineName, .engine-btn .fa-chevron-down { display: none !important; }
+            .engine-dropdown { width: 100%; left: 0; top: 130%; border-radius: 12px; max-height: 40vh; }
+            .search-input { font-size: 1rem; padding: 12px 8px; }
+            .btn-icon { width: 40px; height: 40px; }
+            .btn-mic { margin-right: 4px; }
+            .search-history { left: 5px; right: 5px; border-radius: 12px; }
+            .history-item { padding: 12px 15px; font-size: 0.95rem; }
+            .bento-grid { gap: 12px; grid-template-columns: repeat(2, 1fr); }
+            .card { height: 140px; padding: 15px; }
+            .card-icon { width: 38px; height: 38px; font-size: 1rem; }
+            .card h3 { font-size: 0.95rem; }
+            .card p { font-size: 0.7rem; }
+            .dropdown-option[data-cols="auto"] { display: none !important; }
+        }
+        
+        @media (min-width: 601px) {
+            .dropdown-option[data-cols="2"], .dropdown-option[data-cols="3"] { display: none; }
+        }
+
+        .bento-grid.cols-5 { gap: 8px; }
+        .bento-grid.cols-5 .card { height: 110px; padding: 8px; }
+        .bento-grid.cols-5 .card-icon { width: 26px; height: 26px; font-size: 0.75rem; margin-bottom: 4px; padding: 0; }
+        .bento-grid.cols-5 .card h3 { font-size: 0.65rem; line-height: 1.1; margin: 0; }
+        .bento-grid.cols-5 .card p { display: none; }
+        .bento-grid.cols-5 .card-bg-icon { display: none; }
 
         /* --- MODAL --- */
         .modal-overlay {
@@ -529,64 +636,28 @@
         /* Coin */ .coin-container { width: 100px; height: 100px; margin: 20px auto; perspective: 600px; } .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 1s; } .coin-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 2rem; border-radius: 50%; border: 2px solid var(--glass-border); } .coin-front { background: #fbbf24; } .coin-back { background: #cbd5e1; transform: rotateY(180deg); }
         /* Dice */ .dice-box { text-align: center; font-size: 4rem; padding: 30px; background: rgba(255,255,255,0.05); border-radius: 20px; margin-bottom: 20px; }
         /* Reflex */ .reflex-area { height: 200px; background: rgba(255,255,255,0.05); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; transition: background 0.1s; } .reflex-area.waiting { background: #ef4444; } .reflex-area.now { background: #10b981; } .reflex-area:active { transform: scale(0.98); }
-
-        /* Footer */
-        footer { text-align: center; padding: 2rem 0; color: var(--text-muted); border-top: 1px solid var(--glass-border); margin-top: 3rem; font-size: 0.8rem; position: relative; z-index: 2; background: transparent; }
-
-        /* --- MOBILE --- */
-        @media (max-width: 600px) { 
-            .hero h1 { font-size: 2.4rem; } .container { padding: 0 1rem; } .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            .search-wrapper { width: 100%; padding: 0; }
-            .engine-btn { width: 44px; padding: 0; justify-content: center; border-radius: 50%; margin-right: 5px; }
-            #currentEngineName, .engine-btn .fa-chevron-down { display: none !important; }
-            .engine-dropdown { width: 100%; left: 0; top: 130%; border-radius: 12px; max-height: 40vh; }
-            .search-input { font-size: 1rem; padding: 12px 8px; }
-            .btn-icon { width: 40px; height: 40px; }
-            .btn-mic { margin-right: 4px; }
-            .search-history { left: 5px; right: 5px; border-radius: 12px; }
-            .history-item { padding: 12px 15px; font-size: 0.95rem; }
-            .dropdown-option[data-cols="auto"] { display: none !important; }
-        }
-        
-        @media (min-width: 601px) {
-            .dropdown-option[data-cols="2"], .dropdown-option[data-cols="3"] { display: none; }
-        }
-
-        /* Estilos para opção 5 Colunas (Compactada) */
-        .bento-grid.cols-5 { gap: 8px; }
-        .bento-grid.cols-5 .card { height: 110px; padding: 8px; }
-        .bento-grid.cols-5 .card-icon { width: 26px; height: 26px; font-size: 0.75rem; margin-bottom: 4px; padding: 0; }
-        .bento-grid.cols-5 .card h3 { font-size: 0.65rem; line-height: 1.1; margin: 0; }
-        .bento-grid.cols-5 .card p { display: none; }
-        .bento-grid.cols-5 .card-bg-icon { display: none; }
     </style>
 </head>
 <body>
 
-    <!-- CAMADA DE FUNDO PERSONALIZADO (FIXO) -->
+    <!-- FUNDO PADRÃO (img2.jpeg) E CAMADA DE CUSTOMIZAÇÃO -->
     <div id="custom-bg-layer"></div>
-
-    <div class="ambient-light">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
 
     <div class="container">
         <header>
-            <!-- Ícone alterado para fa-cube (Cubo 3D) -->
             <div class="logo"><i class="fa-solid fa-cube"></i> LDX</div>
             
-            <!-- Controles do Header -->
             <div class="header-controls">
                 
-                <!-- BOTÃO HOME (LINK ATUALIZADO) -->
-                <a href="https://deathzephyr.github.io/PortaisLDX/" class="header-btn" title="Voltar ao Portal" target="_self">
+                <!-- BOTÃO HOME -->
+                <a href="https://deathzephyr.github.io/PortaisLDX/" class="header-btn" title="Portal Principal" target="_self">
                     <i class="fa-solid fa-house"></i>
                 </a>
 
                 <div class="header-btn-wrapper">
-                    <button class="header-btn" id="gridBtn" title="Layout"><i class="fa-solid fa-border-all"></i></button>
+                    <button class="header-btn" id="gridBtn" title="Layout">
+                        <i class="fa-solid fa-border-all"></i>
+                    </button>
                     <div class="header-dropdown" id="gridDropdown">
                         <div class="dropdown-option" data-cols="auto">Padrão (Auto)</div>
                         <div class="dropdown-option" data-cols="2">2 Colunas</div>
@@ -594,11 +665,13 @@
                         <div class="dropdown-option" data-cols="5">5 Colunas</div>
                     </div>
                 </div>
-
+                
                 <div class="header-btn-wrapper">
-                    <button class="header-btn" id="catBtn" title="Filtrar Categoria"><i class="fa-solid fa-filter"></i></button>
+                    <button class="header-btn" id="catBtn" title="Filtrar Categoria">
+                        <i class="fa-solid fa-filter"></i>
+                    </button>
                     <div class="header-dropdown" id="catDropdown">
-                        <div class="dropdown-option selected" data-cat-filter="all">Todas</div>
+                        <div class="dropdown-option selected" data-cat-filter="all">Todos</div>
                         <div class="dropdown-option" data-cat-filter="prod">Produtividade</div>
                         <div class="dropdown-option" data-cat-filter="personal">Pessoal</div>
                         <div class="dropdown-option" data-cat-filter="games">Jogos</div>
@@ -612,10 +685,8 @@
             <h1>VertexHub.</h1>
             <p>Seus aplicativos essenciais, integrados ao seu universo.</p>
             
-            <!-- BARRA DE PESQUISA -->
             <div class="search-wrapper">
                 <div class="search-bar">
-                    <!-- Seletor de Motor -->
                     <div class="engine-selector">
                         <button class="engine-btn" id="engineBtn" title="Trocar Motor de Busca">
                             <i class="fa-brands fa-google icon-google" id="currentEngineIcon"></i>
@@ -634,31 +705,26 @@
                         </div>
                     </div>
 
-                    <!-- Input -->
                     <form class="search-input-container" id="searchForm">
                         <input type="text" class="search-input" placeholder="Buscar aplicativo ou pesquisar na web..." id="searchInput" autocomplete="off">
                     </form>
 
-                    <!-- Botões -->
                     <div class="action-btns">
                         <button class="btn-icon btn-mic" id="voiceBtn" title="Pesquisa por Voz"><i class="fa-solid fa-microphone"></i></button>
                         <button type="submit" form="searchForm" class="btn-icon btn-submit" title="Pesquisar"><i class="fa-solid fa-arrow-right"></i></button>
                     </div>
                 </div>
 
-                <!-- Dropdown de Histórico -->
                 <div class="search-history" id="searchHistory">
                     <div class="history-label">Recentes</div>
-                    <div id="historyList">
-                        <!-- Itens inseridos via JS -->
-                    </div>
+                    <div id="historyList"></div>
                 </div>
             </div>
         </section>
 
         <div class="bento-grid" id="bentoGrid">
             
-            <!-- 1. PRODUTIVIDADE (AZUL) -->
+            <!-- SEÇÃO: PRODUTIVIDADE -->
             <div class="section-header header-prod">
                 <div class="section-title"><i class="fa-solid fa-briefcase"></i> Produtividade</div><div class="section-line"></div>
             </div>
@@ -668,7 +734,7 @@
             <div class="card" data-cat="prod" onclick="openModal('passModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-key"></i></div><h3>Senha Segura</h3><p>Gerador Random</p></div></div>
             <div class="card" data-cat="prod" onclick="openModal('todoModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-list-check"></i></div><h3>Lista de Tarefas</h3><p>To-Do List</p></div></div>
 
-            <!-- 2. PESSOAL (ROSA) -->
+            <!-- SEÇÃO: PESSOAL -->
             <div class="section-header header-personal">
                 <div class="section-title"><i class="fa-solid fa-user"></i> Pessoal</div><div class="section-line"></div>
             </div>
@@ -678,9 +744,9 @@
             <div class="card" data-cat="personal" onclick="openModal('ageModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-cake-candles"></i></div><h3>Idade</h3><p>Calculadora Data</p></div></div>
             <div class="card" data-cat="personal" onclick="openModal('habitModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-repeat"></i></div><h3>Hábitos</h3><p>Rastreador Diário</p></div></div>
 
-            <!-- 3. JOGOS (ROXO) -->
+            <!-- SEÇÃO: JOGOS -->
             <div class="section-header header-games">
-                <div class="section-title"><i class="fa-solid fa-gamepad"></i> Jogos & Entretenimento</div><div class="section-line"></div>
+                <div class="section-title"><i class="fa-solid fa-gamepad"></i> Jogos</div><div class="section-line"></div>
             </div>
             <div class="card" data-cat="games" onclick="openModal('tictactoeModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-x"></i></div><h3>Jogo da Velha</h3><p>Tic-Tac-Toe</p></div></div>
             <div class="card" data-cat="games" onclick="openModal('rpsModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-hand-scissors"></i></div><h3>Pedra Papel Tesoura</h3><p>Sorteio Clássico</p></div></div>
@@ -688,7 +754,7 @@
             <div class="card" data-cat="games" onclick="openModal('diceModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-dice"></i></div><h3>Dados</h3><p>Role 1 a 6</p></div></div>
             <div class="card" data-cat="games" onclick="openModal('reflexModal')"><div class="card-content"><div class="card-icon"><i class="fa-solid fa-bolt"></i></div><h3>Teste de Reflexo</h3><p>Reaja Rápido</p></div></div>
 
-            <!-- 4. FERRAMENTAS (LARANJA) -->
+            <!-- SEÇÃO: FERRAMENTAS -->
             <div class="section-header header-tools">
                 <div class="section-title"><i class="fa-solid fa-toolbox"></i> Ferramentas</div><div class="section-line"></div>
             </div>
@@ -700,7 +766,9 @@
 
         </div>
 
-        <footer><p>DESIGN BY LDX &copy; 2026 | INTEGRADO AO PORTAL</p></footer>
+        <footer>
+            <p>DESIGN BY LDX ©2026</p>
+        </footer>
     </div>
 
     <!-- MODALS OVERLAY -->
@@ -933,63 +1001,28 @@
     </div>
 
     <script>
-        /* --- SISTEMA DE SINCRONIZAÇÃO FORÇADA (PORTAISLDX) --- */
-        const customBgLayer = document.getElementById('custom-bg-layer');
-        
-        // Variável para rastrear qual imagem está atualmente na tela
-        let currentActiveBg = 'img2.jpeg'; 
-
-        function syncBackground() {
+        /* --- SINCRONIZAÇÃO IDENTICA AO GAMEHUB --- */
+        function initSyncedSettings() {
+            const bgLayer = document.getElementById('custom-bg-layer');
+            
+            // 1. Sincronizar Fundo
             const savedBg = localStorage.getItem('ldx_custom_bg');
-            const savedType = localStorage.getItem('ldx_bg_type');
-
-            // Define o valor que queremos usar (do Portal ou Padrão)
-            let targetBg = 'img2.jpeg'; // Padrão
-            let isImageType = false;
-
-            if (savedBg && savedType === 'image') {
-                targetBg = savedBg;
-                isImageType = true;
+            if (savedBg) {
+                bgLayer.style.backgroundImage = `url('${savedBg}')`;
+            } else {
+                // Se não tiver customizado, usa o padrão (já definido no CSS, mas garante aqui)
+                bgLayer.style.backgroundImage = `url('img2.jpeg')`;
             }
+            bgLayer.style.opacity = '1'; 
 
-            // Só atualiza se o valor for diferente do que está na tela
-            if (currentActiveBg !== targetBg) {
-                currentActiveBg = targetBg;
-                
-                // Prepara a URL com anti-cache (Cache Buster)
-                let finalUrl = targetBg;
-                
-                // Se NÃO for Base64 (não começa com data:), adiciona timestamp para forçar atualização
-                // Isso resolve o problema de trocar a imagem com o mesmo nome
-                if (!targetBg.startsWith('data:')) {
-                    const sep = targetBg.includes('?') ? '&' : '?';
-                    finalUrl = targetBg + sep + new Date().getTime();
-                }
-
-                // Aplica a imagem
-                customBgLayer.style.backgroundImage = `url('${finalUrl}')`;
-                
-                // Ativa o modo de fundo personalizado (esconde luzes)
-                document.body.classList.add('has-custom-bg');
-                
-                // Debug (opcional)
-                console.log("VertexHub: Fundo atualizado para", targetBg);
+            // 2. Sincronizar Estilo dos Cards
+            const savedStyle = localStorage.getItem('ldx_card_style');
+            if (savedStyle === 'transparent') {
+                document.body.classList.add('transparent-mode');
+            } else if (savedStyle === 'invisible') {
+                document.body.classList.add('invisible-mode');
             }
         }
-
-        // 1. Executa imediatamente ao carregar
-        syncBackground();
-
-        // 2. Listener para atualizações em outras abas (Padrão)
-        window.addEventListener('storage', (e) => {
-            if (e.key === 'ldx_custom_bg' || e.key === 'ldx_bg_type') {
-                syncBackground();
-            }
-        });
-
-        // 3. POLLING (Loop de verificação) - GARANTE atualização mesmo se o evento falhar
-        // Verifica a cada 500ms se mudou algo no localStorage
-        setInterval(syncBackground, 500);
 
         /* --- SISTEMA DE MODAIS --- */
         const overlay = document.getElementById('modalOverlay');
@@ -1216,13 +1249,13 @@
 
         /* --- PESQUISA & FILTROS --- */
         const engines = {
-            google: { name: 'Google', url: 'https://www.google.com.br/search?q=', icon: 'fa-brands fa-google icon-google' },
-            bing: { name: 'Bing', url: 'https://www.bing.com.br/search?q=', icon: 'fa-brands fa-microsoft icon-bing' },
+            google: { name: 'Google', url: 'https://www.google.com/search?q=', icon: 'fa-brands fa-google icon-google' },
+            bing: { name: 'Bing', url: 'https://www.bing.com/search?q=', icon: 'fa-brands fa-microsoft icon-bing' },
             duckduckgo: { name: 'DuckDuckGo', url: 'https://duckduckgo.com/?q=', icon: 'fa-solid fa-shield-cat icon-ddg' },
-            youtube: { name: 'YouTube', url: 'https://www.youtube.com.br/results?search_query=', icon: 'fa-brands fa-youtube icon-youtube' },
+            youtube: { name: 'YouTube', url: 'https://www.youtube.com/results?search_query=', icon: 'fa-brands fa-youtube icon-youtube' },
             spotify: { name: 'Spotify', url: 'https://open.spotify.com/search/', icon: 'fa-brands fa-spotify icon-spotify' },
-            reddit: { name: 'Reddit', url: 'https://www.reddit.com.br/search/?q=', icon: 'fa-brands fa-reddit icon-reddit' },
-            amazon: { name: 'Amazon', url: 'https://www.amazon.com.br/s?k=', icon: 'fa-brands fa-amazon icon-amazon' },
+            reddit: { name: 'Reddit', url: 'https://www.reddit.com/search/?q=', icon: 'fa-brands fa-reddit icon-reddit' },
+            amazon: { name: 'Amazon', url: 'https://www.amazon.com/s?k=', icon: 'fa-brands fa-amazon icon-amazon' },
             wikipedia: { name: 'Wikipedia', url: 'https://pt.wikipedia.org/wiki/Special:Search?search=', icon: 'fa-brands fa-wikipedia-w icon-wiki' }
         };
 
@@ -1281,7 +1314,6 @@
         });
         searchInput.addEventListener('input', filterCards);
 
-        // Lógica de Motor de Busca
         engineBtn.addEventListener('click', (e) => { e.stopPropagation(); engineDropdown.classList.toggle('active'); });
         document.querySelectorAll('.engine-option').forEach(option => {
             option.addEventListener('click', () => {
@@ -1302,7 +1334,6 @@
             if (!catBtn.contains(e.target) && !catDropdown.contains(e.target)) catDropdown.classList.remove('active');
         });
 
-        // Histórico
         const storageKey = 'vertexHub_history_v2';
         let searches = JSON.parse(localStorage.getItem(storageKey)) || [];
 
@@ -1343,7 +1374,6 @@
         }
         searchForm.addEventListener('submit', (e) => { e.preventDefault(); performSearch(searchInput.value); });
 
-        // Voz
         const voiceBtn = document.getElementById('voiceBtn');
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1387,7 +1417,7 @@
                 bentoGrid.style.gridTemplateColumns = '';
                 saveGridPreference('auto');
             } else {
-                bentoGrid.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+                bentoGrid.style.gridTemplateColumns = `repeat(${cols},1fr)`;
                 if(cols != 'auto') bentoGrid.classList.add(`cols-${cols}`);
                 saveGridPreference(cols);
             }
@@ -1397,35 +1427,59 @@
             else localStorage.setItem('vertexHub_desktopCols', value);
         }
         function loadSavedGrid() {
-            let savedCols; let key;
-            if (window.innerWidth <= 600) { key = 'vertexHub_mobileCols'; savedCols = localStorage.getItem(key); if(!savedCols) savedCols = '2'; } 
-            else { key = 'vertexHub_desktopCols'; savedCols = localStorage.getItem(key); if(!savedCols) savedCols = 'auto'; }
+            let savedCols;
+            if (window.innerWidth <= 600) {
+                savedCols = localStorage.getItem('vertexHub_mobileCols') || '2';
+            } else {
+                savedCols = localStorage.getItem('vertexHub_desktopCols') || 'auto';
+            }
             const optToSelect = document.querySelector(`#gridDropdown .dropdown-option[data-cols="${savedCols}"]`);
             if(optToSelect) optToSelect.classList.add('selected');
             applyGrid(savedCols);
         }
         loadSavedGrid();
-        let lastWidth = window.innerWidth;
-        window.addEventListener('resize', () => { if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; loadSavedGrid(); } });
-        document.addEventListener('click', (e) => { if (!gridBtn.contains(e.target) && !gridDropdown.contains(e.target)) { gridDropdown.classList.remove('active'); } });
 
-        /* --- TILT 3D & RIPPLE --- */
-        document.querySelectorAll('.card').forEach(c => {
-            c.addEventListener('mousemove',e=>{
-                if(window.innerWidth>768){
-                    const r=c.getBoundingClientRect();
-                    const x=e.clientX-r.left-r.width/2; const y=e.clientY-r.top-r.height/2;
-                    c.style.transform=`perspective(1000px) rotateX(${y/-15}deg) rotateY(${x/15}deg) scale(1.02)`;
-                }
-            });
-            c.addEventListener('mouseleave',()=>c.style.transform='perspective(1000px) rotateX(0) rotateY(0) scale(1)');
+        let lastWidth = window.innerWidth;
+        window.addEventListener('resize', () => {
+            if (window.innerWidth !== lastWidth) {
+                lastWidth = window.innerWidth;
+                loadSavedGrid();
+            }
         });
 
-        document.querySelectorAll('.card').forEach(card => {
+        document.addEventListener('click', (e) => {
+            if (!gridBtn.contains(e.target) && !gridDropdown.contains(e.target)) {
+                gridDropdown.classList.remove('active');
+            }
+        });
+
+        /* --- TILT 3D --- */
+        const cardElements = document.querySelectorAll('.card');
+        cardElements.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                if(window.innerWidth >768) {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -8;
+                    const rotateY = ((x - centerX) / centerX) * 8;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                }
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+            });
+        });
+
+        /* --- RIPPLE EFFECT & CLICK ANIMATION --- */
+        cardElements.forEach(card => {
             card.addEventListener('click', function(e) {
                 if(e.button === 0) {
                     e.preventDefault();
                     this.classList.add('clicked');
+
                     const ripple = document.createElement('span');
                     ripple.classList.add('ripple');
                     const rect = card.getBoundingClientRect();
@@ -1437,11 +1491,15 @@
                     ripple.style.top = `${y - size / 2}px`;
                     card.appendChild(ripple);
                     setTimeout(() => { ripple.remove(); }, 600);
+                    
                     setTimeout(() => { this.classList.remove('clicked'); }, 200);
                     if(this.getAttribute('onclick')) eval(this.getAttribute('onclick'));
                 }
             });
         });
+        
+        // Inicializa Sincronização
+        document.addEventListener('DOMContentLoaded', initSyncedSettings);
     </script>
 </body>
 </html>
