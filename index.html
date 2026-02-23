@@ -13,34 +13,29 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        /* --- DESIGN SYSTEM (BASEADO NO CENTRALHUB) --- */
+        /* --- DESIGN SYSTEM (INTEGRADO PORTAISLDX) --- */
         :root {
             --bg-dark: #050507;
-            --glass-bg: rgba(20, 20, 25, 0.6); 
-            --glass-border: rgba(255, 255, 255, 0.1);
+            /* Glass mais forte para melhor integração com o fundo do Portal */
+            --glass-bg: rgba(15, 15, 20, 0.55); 
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            
+            /* Cores LDX */
             --accent-primary: #8b5cf6; 
             --accent-secondary: #ec4899; 
             --accent-cyan: #06b6d4; 
             --text-main: #ffffff;
             --text-muted: #94a3b8;
             --gradient-primary: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            --shadow-card: 0 10px 30px -5px rgba(0, 0, 0, 0.5);
+            --shadow-card: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
             
-            /* Cores das Marcas (CentralHub) */
-            --color-google: #EA4335;
-            --color-youtube: #FF0000;
-            --color-bing: #008373;
-            --color-amazon: #FF9900;
-            --color-reddit: #FF4500;
-            --color-wiki: #FFFFFF;
-            --color-spotify: #1DB954;
-            --color-shopee: #ee4d2d;   
-            --color-discord: #5865F2;  
-            --color-whatsapp: #25D366; 
-            --color-tiktok: #ff0050;   
-            --color-netflix: #E50914;  
-            --color-globo: #00AEEF;    
-            --color-uol: #0054A6;      
+            /* Cores das Marcas */
+            --color-google: #EA4335; --color-youtube: #FF0000; --color-bing: #008373;
+            --color-amazon: #FF9900; --color-reddit: #FF4500; --color-wiki: #FFFFFF;
+            --color-spotify: #1DB954; --color-shopee: #ee4d2d; --color-discord: #5865F2;
+            --color-whatsapp: #25D366; --color-tiktok: #ff0050; --color-netflix: #E50914;
+            --color-globo: #00AEEF; --color-uol: #0054A6;
 
             /* Cores das Categorias UtilityHub */
             --color-prod: #3b82f6;      /* Azul */
@@ -76,38 +71,34 @@
             pointer-events: none;
         }
 
-        body.has-custom-bg .ambient-light {
-            opacity: 0;
-            transition: opacity 0.5s ease;
-        }
+        body.has-custom-bg .ambient-light { opacity: 0; transition: opacity 0.5s ease; }
+        body.has-custom-bg #custom-bg-layer { opacity: 1; }
 
-        body.has-custom-bg #custom-bg-layer {
-            opacity: 1;
-        }
-
-        /* --- BACKGROUND AMBIENTE --- */
+        /* --- BACKGROUND AMBIENTE (SINCRONIZADO LDX) --- */
         .ambient-light {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
             overflow: hidden;
             pointer-events: none;
+            transition: opacity 0.5s ease;
         }
 
         .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.4;
+            filter: blur(100px);
+            opacity: 0.5;
             animation: floatOrb 25s infinite alternate ease-in-out;
         }
-        /* Cores dos orbes inspiradas nas categorias */
-        .orb-1 { width: 500px; height: 500px; background: var(--color-prod); top: -150px; left: -150px; animation-duration: 30s; }
-        .orb-2 { width: 600px; height: 600px; background: var(--accent-primary); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
-        .orb-3 { width: 350px; height: 350px; background: var(--color-tools); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.25; animation: pulseOrb 12s infinite ease-in-out; }
+        
+        /* Cores baseadas no tema LDX */
+        .orb-1 { width: 500px; height: 500px; background: var(--accent-primary); top: -150px; left: -150px; animation-duration: 30s; }
+        .orb-2 { width: 600px; height: 600px; background: var(--accent-secondary); bottom: -150px; right: -150px; animation-duration: 35s; animation-delay: -5s; }
+        .orb-3 { width: 350px; height: 350px; background: var(--accent-cyan); top: 40%; left: 50%; transform: translate(-50%, -50%); opacity: 0.3; animation: pulseOrb 12s infinite ease-in-out; }
 
         @keyframes floatOrb { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(60px, 90px) scale(1.1); } }
-        @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.35; transform: translate(-50%, -50%) scale(1.1); } }
+        @keyframes pulseOrb { 0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(0.9); } 50% { opacity: 0.4; transform: translate(-50%, -50%) scale(1.1); } }
 
         .container { max-width: 1400px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; padding-bottom: 2rem; }
 
@@ -120,7 +111,7 @@
         
         .header-btn {
             background: rgba(255,255,255,0.03);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--glass-border);
             border-radius: 50%;
             width: 44px; height: 44px;
             display: flex;
@@ -132,25 +123,26 @@
             text-decoration: none;
             position: relative;
             z-index: 10;
+            backdrop-filter: blur(10px);
         }
-        .header-btn:hover { background: rgba(255,255,255,0.1); color: white; }
+        .header-btn:hover { background: rgba(255,255,255,0.1); color: white; border-color: rgba(255,255,255,0.3); }
         .header-btn i { font-size: 1.1rem; }
 
         .header-dropdown {
             position: absolute;
             top: 120%; right: 0;
-            background: rgba(15, 15, 20, 0.98);
-            backdrop-filter: blur(20px);
+            background: rgba(10, 10, 15, 0.95);
+            backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 6px;
+            border-radius: 16px;
+            padding: 8px;
             width: 160px;
             display: none; 
             flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             opacity: 0;
             transform: translateY(-10px);
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             z-index: 1000;
         }
         .header-dropdown.active { display: flex; opacity: 1; transform: translateY(0); }
@@ -171,7 +163,7 @@
             white-space: nowrap;
         }
         
-        /* Cores dos Filtros no Dropdown */
+        /* Cores dos Filtros */
         #catDropdown .dropdown-option[data-cat-filter="prod"] { color: var(--color-prod); }
         #catDropdown .dropdown-option[data-cat-filter="personal"] { color: var(--color-personal); }
         #catDropdown .dropdown-option[data-cat-filter="games"] { color: var(--color-games); }
@@ -195,19 +187,19 @@
             background-size: 300% auto;
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
-            animation: colorCycle 6s linear infinite;
+            animation: colorCycle 8s linear infinite;
             letter-spacing: -2px; 
             filter: drop-shadow(0 0 30px rgba(0,0,0,0.5)); 
         }
         
         .hero p { color: var(--text-muted); font-size: 1.05rem; max-width: 550px; margin: 0 auto 2.5rem; padding: 0 10px; font-weight: 400; }
 
-        /* --- BARRA DE PESQUISA (ESTILO CENTRALHUB) --- */
+        /* --- BARRA DE PESQUISA --- */
         .search-wrapper { position: relative; max-width: 700px; margin: 0 auto; z-index: 100; width: 100%; }
         
         .search-bar { 
             position: relative; display: flex; align-items: center; 
-            background: rgba(20, 20, 25, 0.7); 
+            background: rgba(20, 20, 25, 0.6); 
             border: 1px solid var(--glass-border); 
             border-radius: 28px; 
             padding: 6px; 
@@ -219,8 +211,8 @@
 
         .search-bar:focus-within { 
             background: rgba(25, 25, 30, 0.85); 
-            border-color: rgba(139, 92, 246, 0.4); 
-            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.1), 0 30px 60px -12px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15); 
+            border-color: rgba(139, 92, 246, 0.5); 
+            box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.15), 0 30px 60px -12px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15); 
             transform: translateY(-2px); 
         }
 
@@ -252,7 +244,7 @@
         .engine-dropdown {
             position: absolute;
             top: 120%; left: 0;
-            background: rgba(15, 15, 20, 0.98);
+            background: rgba(10, 10, 15, 0.98);
             backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
             border-radius: 16px;
@@ -272,7 +264,6 @@
         .engine-dropdown::-webkit-scrollbar { width: 6px; }
         .engine-dropdown::-webkit-scrollbar-track { background: transparent; }
         .engine-dropdown::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
-        .engine-dropdown::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.3); }
         .engine-dropdown.active { display: flex; opacity: 1; transform: translateY(0); }
         
         .engine-option {
@@ -292,14 +283,10 @@
         .engine-option.selected { background: rgba(255,255,255,0.05); color: white; font-weight: 500; }
         
         /* Cores dos Ícones de Busca */
-        .icon-google { color: var(--color-google); }
-        .icon-youtube { color: var(--color-youtube); }
-        .icon-bing { color: var(--color-bing); }
-        .icon-ddg { color: var(--color-shopee); } 
-        .icon-amazon { color: var(--color-amazon); }
-        .icon-reddit { color: var(--color-reddit); }
-        .icon-wiki { color: var(--color-wiki); }
-        .icon-spotify { color: var(--color-spotify); }
+        .icon-google { color: var(--color-google); } .icon-youtube { color: var(--color-youtube); }
+        .icon-bing { color: var(--color-bing); } .icon-ddg { color: var(--color-shopee); } 
+        .icon-amazon { color: var(--color-amazon); } .icon-reddit { color: var(--color-reddit); }
+        .icon-wiki { color: var(--color-wiki); } .icon-spotify { color: var(--color-spotify); }
 
         /* Input */
         .search-input-container { flex: 1; position: relative; }
@@ -326,10 +313,7 @@
 
         .btn-icon:hover { background: rgba(255,255,255,0.08); color: white; transform: scale(1.05); }
 
-        .btn-mic.listening { 
-            color: var(--color-google); 
-            animation: pulseMic 1.5s infinite; 
-        }
+        .btn-mic.listening { color: var(--color-google); animation: pulseMic 1.5s infinite; }
         
         @keyframes pulseMic {
             0% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0.4); }
@@ -337,15 +321,8 @@
             100% { box-shadow: 0 0 0 0 rgba(234, 67, 53, 0); }
         }
 
-        .btn-submit { 
-            background: var(--gradient-primary); 
-            color: white; 
-            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3);
-        }
-        .btn-submit:hover { 
-            transform: scale(1.05) rotate(-10deg); 
-            box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5); 
-        }
+        .btn-submit { background: var(--gradient-primary); color: white; box-shadow: 0 4px 15px rgba(236, 72, 153, 0.3); }
+        .btn-submit:hover { transform: scale(1.05) rotate(-10deg); box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5); }
 
         /* Histórico */
         .search-history {
@@ -402,14 +379,15 @@
         .section-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; white-space: nowrap; display: flex; align-items: center; gap: 10px; }
         .section-line { height: 1px; width: 100%; background: linear-gradient(to right, rgba(255,255,255,0.2), transparent); }
 
-        /* Cores das Seções (Linhas e Títulos) */
+        /* Cores das Seções */
         .header-prod .section-title { color: var(--color-prod); } .header-prod .section-line { background: linear-gradient(to right, var(--color-prod), transparent); }
         .header-personal .section-title { color: var(--color-personal); } .header-personal .section-line { background: linear-gradient(to right, var(--color-personal), transparent); }
         .header-games .section-title { color: var(--color-games); } .header-games .section-line { background: linear-gradient(to right, var(--color-games), transparent); }
         .header-tools .section-title { color: var(--color-tools); } .header-tools .section-line { background: linear-gradient(to right, var(--color-tools), transparent); }
 
-        /* --- CARDS --- */
+        /* --- CARDS (QUADRADOS CONECTADOS) --- */
         .card {
+            /* Fundo Vidro Reforçado */
             background: var(--glass-bg);
             border: 1px solid var(--glass-border);
             border-radius: 20px;
@@ -418,8 +396,10 @@
             color: white;
             position: relative;
             overflow: hidden;
+            /* Aumentado o blur para integração total com o background do Portal */
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             transition: transform 0.1s linear, box-shadow 0.4s ease, border-color 0.3s ease, background 0.3s ease;
-            backdrop-filter: blur(25px);
             height: 150px;
             display: flex;
             flex-direction: column;
@@ -428,19 +408,24 @@
             transform-style: preserve-3d;
             will-change: transform;
             cursor: pointer;
+            box-shadow: var(--shadow-card);
         }
+        
         .card::after {
             content: ""; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
             background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0) 100%);
             transform: skewX(-25deg); transition: 0.6s; pointer-events: none; z-index: 5; 
         }
         .card:hover::after { left: 150%; transition: 0.8s ease-in-out; }
-        .card:hover { background: rgba(30, 30, 35, 0.8); border-color: rgba(255,255,255,0.4); }
         
-        /* Animação de Clique (Shrink) */
+        .card:hover { 
+            background: rgba(30, 30, 35, 0.75); 
+            border-color: rgba(255,255,255,0.4); 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        
         .card.clicked { transform: scale(0.95); opacity: 0.8; box-shadow: none; }
         
-        /* Animação Ripple */
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -455,34 +440,16 @@
         .card-bg-icon { position: absolute; right: -10px; bottom: -10px; font-size: 5rem; opacity: 0.04; transform: rotate(-15deg); pointer-events: none; transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); z-index: 1; }
         .card:hover .card-bg-icon { opacity: 0.08; transform: rotate(0deg) scale(1.2); }
         .card-content { 
-            position: relative; 
-            z-index: 20 !important; 
-            transform: translateZ(20px); 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            text-align: center; 
-            gap: 8px; 
-            width: 100%; 
-            justify-content: center; 
-            height: 100%; 
-            pointer-events: none; 
+            position: relative; z-index: 20 !important; transform: translateZ(20px); 
+            display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; 
+            width: 100%; justify-content: center; height: 100%; pointer-events: none; 
         }
 
         .card-icon { 
-            width: 42px; 
-            height: 42px; 
-            aspect-ratio: 1/1; 
-            border-radius: 6px; 
-            background: rgba(255,255,255,0.05); 
-            display: flex; justify-content: center; align-items: center; 
-            font-size: 1.1rem; 
-            border: 1px solid rgba(255,255,255,0.05); 
-            transition: all 0.3s ease; 
-            margin-bottom: 8px; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); line-height: 0; 
-            position: relative; 
-            z-index: 10 !important;
+            width: 42px; height: 42px; aspect-ratio: 1/1; border-radius: 12px; 
+            background: rgba(255,255,255,0.03); display: flex; justify-content: center; align-items: center; 
+            font-size: 1.1rem; border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; 
+            margin-bottom: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); line-height: 0; position: relative; z-index: 10 !important;
             flex-shrink: 0; 
         }
         .card-icon i { display: inline-flex; align-items: center; justify-content: center; margin: 0; vertical-align: middle; }
@@ -491,7 +458,7 @@
         .card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 2px; letter-spacing: -0.3px; }
         .card p { font-size: 0.75rem; color: var(--text-muted); line-height: 1.3; }
 
-        /* Cores dos Cards (Hover Effects) */
+        /* Hover Effects */
         .card[data-cat="prod"] .card-icon { color: var(--color-prod); text-shadow: 0 0 15px rgba(59, 130, 246, 0.2); }
         .card[data-cat="prod"]:hover { box-shadow: 0 20px 40px -10px rgba(59, 130, 246, 0.3), 0 0 0 1px rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3); }
 
@@ -507,7 +474,7 @@
         /* --- MODAL --- */
         .modal-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(15px); z-index: 1000;
+            background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(15px); z-index: 1000;
             display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
@@ -547,56 +514,17 @@
         
         /* TIC TAC TOE UI UPDATE */
         .ttt-mode-selector {
-            display: flex;
-            background: rgba(255,255,255,0.05);
-            padding: 4px;
-            border-radius: 10px;
-            margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.05);
+            display: flex; background: rgba(255,255,255,0.05); padding: 4px; border-radius: 10px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05);
         }
         .ttt-mode-btn {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            background: transparent;
-            color: var(--text-muted);
-            cursor: pointer;
-            border-radius: 8px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 0.9rem;
+            flex: 1; padding: 8px; border: none; background: transparent; color: var(--text-muted); cursor: pointer; border-radius: 8px; font-weight: 600; transition: all 0.3s ease; font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem;
         }
         .ttt-mode-btn:hover { color: white; background: rgba(255,255,255,0.05); }
-        .ttt-mode-btn.active {
-            background: var(--color-games);
-            color: white;
-            box-shadow: 0 2px 10px rgba(168, 85, 247, 0.3);
-        }
+        .ttt-mode-btn.active { background: var(--color-games); color: white; box-shadow: 0 2px 10px rgba(168, 85, 247, 0.3); }
 
-        /* Tabuleiro */
-        .ttt-grid { 
-            grid-template-columns: repeat(3, 1fr); 
-            width: 100%; 
-            aspect-ratio: 1 / 1; 
-        } 
-        
-        .ttt-cell { 
-            aspect-ratio: 1; 
-            background: rgba(255,255,255,0.05); 
-            border: 1px solid var(--glass-border); 
-            border-radius: 8px; 
-            font-size: 2rem; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            transition: 0.2s;
-            color: white;
-            min-height: 50px;
-        } 
-        .ttt-cell:hover:not(:empty) { background: rgba(255,255,255,0.05); } 
-        .ttt-cell:empty:hover { background: rgba(255,255,255,0.15); }
+        .ttt-grid { grid-template-columns: repeat(3, 1fr); width: 100%; aspect-ratio: 1 / 1; } 
+        .ttt-cell { aspect-ratio: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; font-size: 2rem; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; color: white; min-height: 50px; } 
+        .ttt-cell:hover:not(:empty) { background: rgba(255,255,255,0.05); } .ttt-cell:empty:hover { background: rgba(255,255,255,0.15); }
         
         /* RPS */ .rps-choices { display: flex; justify-content: center; gap: 15px; margin: 20px 0; } .rps-btn { font-size: 2rem; background: rgba(255,255,255,0.05); border: none; width: 70px; height: 70px; border-radius: 50%; cursor: pointer; transition: 0.2s; } .rps-btn:hover { background: rgba(255,255,255,0.15); transform: scale(1.1); } .rps-result { text-align: center; font-size: 1.2rem; font-weight: bold; min-height: 1.5em; }
         /* Coin */ .coin-container { width: 100px; height: 100px; margin: 20px auto; perspective: 600px; } .coin { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 1s; } .coin-face { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; display: flex; align-items: center; justify-content: center; font-size: 2rem; border-radius: 50%; border: 2px solid var(--glass-border); } .coin-front { background: #fbbf24; } .coin-back { background: #cbd5e1; transform: rotateY(180deg); }
@@ -608,14 +536,9 @@
 
         /* --- MOBILE --- */
         @media (max-width: 600px) { 
-            .hero h1 { font-size: 2.4rem; } 
-            .container { padding: 0 1rem; } 
-            .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            
+            .hero h1 { font-size: 2.4rem; } .container { padding: 0 1rem; } .bento-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
             .search-wrapper { width: 100%; padding: 0; }
-            .engine-btn {
-                width: 44px; padding: 0; justify-content: center; border-radius: 50%; margin-right: 5px;
-            }
+            .engine-btn { width: 44px; padding: 0; justify-content: center; border-radius: 50%; margin-right: 5px; }
             #currentEngineName, .engine-btn .fa-chevron-down { display: none !important; }
             .engine-dropdown { width: 100%; left: 0; top: 130%; border-radius: 12px; max-height: 40vh; }
             .search-input { font-size: 1rem; padding: 12px 8px; }
@@ -655,11 +578,11 @@
             <!-- Ícone alterado para fa-cube (Cubo 3D) -->
             <div class="logo"><i class="fa-solid fa-cube"></i> LDX</div>
             
-            <!-- Controles do Header (CentralHub Theme) -->
+            <!-- Controles do Header -->
             <div class="header-controls">
                 
                 <!-- BOTÃO HOME (LINK ATUALIZADO) -->
-                <a href="https://deathzephyr.github.io/PortaisLDX/" class="header-btn" title="Voltar" target="_self">
+                <a href="https://deathzephyr.github.io/PortaisLDX/" class="header-btn" title="Voltar ao Portal" target="_self">
                     <i class="fa-solid fa-house"></i>
                 </a>
 
@@ -688,9 +611,9 @@
 
         <section class="hero">
             <h1>VertexHub.</h1>
-            <p>Seus aplicativos essenciais, em um só lugar.</p>
+            <p>Seus aplicativos essenciais, integrados ao seu universo.</p>
             
-            <!-- BARRA DE PESQUISA (MODELO CENTRALHUB) -->
+            <!-- BARRA DE PESQUISA -->
             <div class="search-wrapper">
                 <div class="search-bar">
                     <!-- Seletor de Motor -->
@@ -778,7 +701,7 @@
 
         </div>
 
-        <footer><p>DESIGN BY LDX &copy; 2026</p></footer>
+        <footer><p>DESIGN BY LDX &copy; 2026 | INTEGRADO AO PORTAL</p></footer>
     </div>
 
     <!-- MODALS OVERLAY -->
@@ -880,11 +803,10 @@
 
         <!-- GAMES START -->
         
-        <!-- 11. TIC TAC TOE (MELHORADO) -->
+        <!-- 11. TIC TAC TOE -->
         <div class="modal-container" id="tictactoeModal">
             <div class="modal-header"><div class="modal-title" style="color:var(--color-games)">Jogo da Velha</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
             
-            <!-- Seletor de Modo BONITO -->
             <div class="ttt-mode-selector">
                 <button class="ttt-mode-btn active" id="modePvp" onclick="setTTTMode('pvp')">1x1 Local</button>
                 <button class="ttt-mode-btn" id="modeBot" onclick="setTTTMode('bot')">Vs Bot (CPU)</button>
@@ -970,7 +892,7 @@
             </div>
         </div>
 
-        <!-- 19. CURRENCY (FIXED) -->
+        <!-- 19. CURRENCY -->
         <div class="modal-container" id="currencyModal">
             <div class="modal-header"><div class="modal-title" style="color:var(--color-tools)">Conversor de Moeda</div><button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button></div>
             <div class="unit-row">
@@ -1012,30 +934,61 @@
     </div>
 
     <script>
-        /* --- BACKGROUND CONNECTION --- */
+        /* --- SISTEMA DE CONEXÃO COM PORTAISLDX (BACKGROUND SYNC) --- */
         const savedBg = localStorage.getItem('ldx_custom_bg');
         const savedType = localStorage.getItem('ldx_bg_type');
         const customBgLayer = document.getElementById('custom-bg-layer');
 
-        if (savedBg && savedType === 'image') {
-            customBgLayer.style.backgroundImage = `url('${savedBg}')`;
-            document.body.classList.add('has-custom-bg');
+        function applyBackground() {
+            if (savedBg && savedType === 'image') {
+                customBgLayer.style.backgroundImage = `url('${savedBg}')`;
+                document.body.classList.add('has-custom-bg');
+            } else {
+                document.body.classList.remove('has-custom-bg');
+            }
         }
+        
+        // Inicializa
+        applyBackground();
 
-        /* --- MODAL SYSTEM --- */
+        // Escuta mudanças em tempo real (Sync entre abas)
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'ldx_custom_bg' || e.key === 'ldx_bg_type') {
+                const newBg = localStorage.getItem('ldx_custom_bg');
+                const newType = localStorage.getItem('ldx_bg_type');
+                if (newBg && newType === 'image') {
+                    customBgLayer.style.backgroundImage = `url('${newBg}')`;
+                    document.body.classList.add('has-custom-bg');
+                } else {
+                    document.body.classList.remove('has-custom-bg');
+                }
+            }
+        });
+
+        /* --- SISTEMA DE MODAIS --- */
         const overlay = document.getElementById('modalOverlay');
-        function openModal(id) { overlay.classList.add('active'); document.getElementById(id).classList.add('active-modal'); 
-            if(id==='weatherModal') getWeather(); if(id==='todoModal') renderTodos(); if(id==='habitModal') renderHabits(); if(id==='tictactoeModal') initTTT();
+        function openModal(id) { 
+            overlay.classList.add('active'); 
+            document.getElementById(id).classList.add('active-modal'); 
+            if(id==='weatherModal') getWeather(); 
+            if(id==='todoModal') renderTodos(); 
+            if(id==='habitModal') renderHabits(); 
+            if(id==='tictactoeModal') initTTT();
         }
-        function closeModal() { overlay.classList.remove('active'); document.querySelectorAll('.modal-container').forEach(m => m.classList.remove('active-modal')); }
+        function closeModal() { 
+            overlay.classList.remove('active'); 
+            document.querySelectorAll('.modal-container').forEach(m => m.classList.remove('active-modal')); 
+            // Parar timers ao fechar para evitar consumo
+            clearInterval(swInt); clearInterval(pInt);
+            swRun=false; pRun=false;
+        }
         overlay.addEventListener('click', (e) => { if (e.target === overlay) closeModal(); });
 
-        /* --- 1. CALC --- */
+        /* --- FERRAMENTAS --- */
         let cVal = '0'; const cScr = document.getElementById('calcScreen');
         function calcInput(v) { if(v==='C') cVal='0'; else if(v==='back') { cVal = cVal.slice(0,-1)||'0'; } else { cVal = cVal==='0' && v!=='.' ? v : cVal+v; } cScr.textContent = cVal; }
         function calcResult() { try { cVal = String(eval(cVal)); cScr.textContent = cVal; } catch { cScr.textContent = 'Erro'; cVal='0'; } }
 
-        /* --- 2. STOPWATCH --- */
         let swInt, swSec=0, swRun=false;
         function toggleStopwatch() {
             if(swRun) { clearInterval(swInt); document.getElementById('swStart').textContent="Continuar"; document.getElementById('swStart').style.background="#333"; }
@@ -1045,7 +998,6 @@
         function resetStopwatch() { clearInterval(swInt); swRun=false; swSec=0; document.getElementById('stopwatchDisplay').textContent="00:00:00"; document.getElementById('swStart').textContent="Iniciar"; document.getElementById('swStart').style.background="var(--color-prod)"; }
         function formatTime(s) { return new Date(s*1000).toISOString().substr(11,8); }
 
-        /* --- 3. POMODORO --- */
         let pInt, pTime=1500, pRun=false;
         function togglePomodoro() {
             if(pRun) { clearInterval(pInt); document.getElementById('pomoStart').textContent="Focar"; document.getElementById('pomoStart').style.background="var(--color-prod)"; }
@@ -1054,10 +1006,8 @@
         }
         function resetPomodoro() { clearInterval(pInt); pRun=false; pTime=1500; document.getElementById('pomoDisplay').textContent="25:00"; document.getElementById('pomoStart').textContent="Focar"; }
 
-        /* --- 4. PASSWORD --- */
         function generatePassword() { let p=""; const c="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*"; for(let i=0;i<16;i++) p+=c.charAt(Math.floor(Math.random()*c.length)); document.getElementById('passResult').textContent=p; } generatePassword();
 
-        /* --- 5. TODO --- */
         let todos = JSON.parse(localStorage.getItem('ldx_todos'))||[];
         function addTodo() { const t = document.getElementById('todoInput').value; if(t) { todos.push({text:t, done:false}); saveTodos(); renderTodos(); document.getElementById('todoInput').value=''; } }
         function toggleTodo(i) { todos[i].done=!todos[i].done; saveTodos(); renderTodos(); }
@@ -1065,7 +1015,6 @@
         function saveTodos() { localStorage.setItem('ldx_todos', JSON.stringify(todos)); }
         function renderTodos() { const l=document.getElementById('todoList'); l.innerHTML=''; todos.forEach((t,i)=> { l.innerHTML+=`<div class="todo-item"><input type="checkbox" ${t.done?'checked':''} onchange="toggleTodo(${i})"><span class="todo-text" style="${t.done?'text-decoration:line-through;color:#666':''}">${t.text}</span><i class="fa-solid fa-trash todo-del" onclick="delTodo(${i})"></i></div>`; }); }
 
-        /* --- 6. WEATHER --- */
         function getWeather() {
             const t=document.getElementById('weatherTemp'); const d=document.getElementById('weatherDesc');
             navigator.geolocation.getCurrentPosition(
@@ -1074,16 +1023,12 @@
             );
         }
 
-        /* --- 7. NOTES --- */
         const nA=document.getElementById('notesArea'); nA.value=localStorage.getItem('ldx_notes')||''; nA.addEventListener('input',()=>localStorage.setItem('ldx_notes', nA.value));
 
-        /* --- 8. IMC --- */
         function calcIMC() { const w=parseFloat(document.getElementById('imcWeight').value); const h=parseFloat(document.getElementById('imcHeight').value); if(w&&h) { const r=(w/(h*h)).toFixed(1); let s=''; if(r<18.5)s='Abaixo do peso'; else if(r<24.9)s='Peso normal'; else if(r<29.9)s='Sobrepeso'; else s='Obesidade'; document.getElementById('imcResult').innerHTML=`IMC: ${r}<br><span style="font-size:0.8rem;color:var(--color-personal)">${s}</span>`; } }
 
-        /* --- 9. AGE --- */
         function calcAge() { const b=new Date(document.getElementById('birthDate').value); const diff=Date.now()-b.getTime(); const ageDate=new Date(diff); document.getElementById('ageResult').textContent=Math.abs(ageDate.getUTCFullYear()-1970) + " Anos"; }
 
-        /* --- 10. HABITS --- */
         let habits = JSON.parse(localStorage.getItem('ldx_habits'))||[];
         function addHabit() { const h=document.getElementById('habitInput').value; if(h) { habits.push({text:h, done:false}); saveHabits(); renderHabits(); document.getElementById('habitInput').value=''; } }
         function toggleHabit(i) { habits[i].done=!habits[i].done; saveHabits(); renderHabits(); }
@@ -1092,29 +1037,19 @@
         function saveHabits() { localStorage.setItem('ldx_habits', JSON.stringify(habits)); }
         function renderHabits() { const l=document.getElementById('habitList'); l.innerHTML=''; habits.forEach((h,i)=> { l.innerHTML+=`<div class="todo-item"><input type="checkbox" ${h.done?'checked':''} onchange="toggleHabit(${i})"><span class="todo-text" style="${h.done?'text-decoration:line-through;color:var(--color-personal)':''}">${h.text}</span><i class="fa-solid fa-trash todo-del" onclick="delHabit(${i})"></i></div>`; }); }
 
-        /* --- GAMES LOGIC (MELHORADO) --- */
-        
-        /* 11. TIC TAC TOE (UI & AI) */
+        /* --- JOGOS --- */
         let tttBoardState = ["", "", "", "", "", "", "", "", ""];
         let tttGameActive = true;
         let tttCurrentPlayer = "X";
         let tttGameMode = "pvp";
+        const tttWinningConditions = [ [0, 1, 2], [3, 4, 5], [6, 7, 8], [0, 3, 6], [1, 4, 7], [2, 5, 8], [0, 4, 8], [2, 4, 6] ];
 
-        const tttWinningConditions = [ 
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], 
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], 
-            [0, 4, 8], [2, 4, 6] 
-        ];
-
-        // Função para trocar o modo visualmente
         function setTTTMode(mode) {
             tttGameMode = mode;
             document.getElementById('modePvp').classList.remove('active');
             document.getElementById('modeBot').classList.remove('active');
-            
             if(mode === 'pvp') document.getElementById('modePvp').classList.add('active');
             else document.getElementById('modeBot').classList.add('active');
-            
             initTTT();
         }
 
@@ -1140,93 +1075,58 @@
 
         function handleTTTClick(index) {
             if (!tttGameActive || tttBoardState[index] !== "") return;
-
             tttBoardState[index] = tttCurrentPlayer;
-            
             if (checkTTTWin()) {
                 document.getElementById('tttStatus').textContent = `Jogador ${tttCurrentPlayer} Venceu!`;
                 tttGameActive = false;
-                renderTTTBoard();
-                return; 
+                renderTTTBoard(); return; 
             }
-            
             if (!tttBoardState.includes("")) {
                 document.getElementById('tttStatus').textContent = "Empate!";
                 tttGameActive = false;
                 renderTTTBoard();
                 return;
             }
-
             tttCurrentPlayer = tttCurrentPlayer === "X" ? "O" : "X";
             document.getElementById('tttStatus').textContent = `Vez do Jogador ${tttCurrentPlayer}`;
-            
             renderTTTBoard();
-            
             if (tttGameMode === 'bot' && tttCurrentPlayer === 'O' && tttGameActive) {
                 setTimeout(botTTTMove, 600);
             }
         }
 
-        function checkTTTWin() {
-            return tttWinningConditions.some(condition => {
-                return condition.every(index => tttBoardState[index] === tttCurrentPlayer);
-            });
-        }
+        function checkTTTWin() { return tttWinningConditions.some(condition => condition.every(index => tttBoardState[index] === tttCurrentPlayer)); }
 
-        // AI MELHORADA (Heurística Básica)
         function botTTTMove() {
             if (!tttGameActive) return;
-            
-            // 1. Tentar Ganhar
             let move = findBestMove("O");
-            if (move !== null) {
-                handleTTTClick(move);
-                return;
-            }
-
-            // 2. Bloquear Jogador
+            if (move !== null) { handleTTTClick(move); return; }
             move = findBestMove("X");
-            if (move !== null) {
-                handleTTTClick(move);
-                return;
-            }
-
-            // 3. Jogar Aleatório (Se não houver ameaça)
+            if (move !== null) { handleTTTClick(move); return; }
             const available = tttBoardState.map((val, idx) => val === "" ? idx : null).filter(val => val !== null);
-            if (available.length > 0) {
-                const randomMove = available[Math.floor(Math.random() * available.length)];
-                handleTTTClick(randomMove);
-            }
+            if (available.length > 0) { const randomMove = available[Math.floor(Math.random() * available.length)]; handleTTTClick(randomMove); }
         }
 
         function findBestMove(player) {
             for (let condition of tttWinningConditions) {
                 let [a, b, c] = condition;
                 let vals = [tttBoardState[a], tttBoardState[b], tttBoardState[c]];
-                // Se o jogador tem 2 e a 3ª está vazia
                 let countPlayer = vals.filter(v => v === player).length;
                 let countEmpty = vals.filter(v => v === "").length;
-
                 if (countPlayer === 2 && countEmpty === 1) {
-                    if (tttBoardState[a] === "") return a;
-                    if (tttBoardState[b] === "") return b;
-                    if (tttBoardState[c] === "") return c;
+                    if (tttBoardState[a] === "") return a; if (tttBoardState[b] === "") return b; if (tttBoardState[c] === "") return c;
                 }
             }
-            return null; // Não há movimento crítico
+            return null;
         }
 
-        /* 12. RPS */
         function playRPS(u) { const c=['rock','paper','scissors'][Math.floor(Math.random()*3)]; let r='Empate!'; const map={rock:'Pedra', paper:'Papel', scissors:'Tesoura'}; if(u==='rock' && c==='scissors' || u==='paper' && c==='rock' || u==='scissors' && c==='paper') r='Você Venceu!'; else if(u!==c) r='CPU Venceu!'; document.getElementById('rpsResult').innerHTML = `Você: ${map[u]}<br>CPU: ${map[c]}<br><span style="color:var(--color-games)">${r}</span>`; }
 
-        /* 13. COIN */
         let flippin=false;
         function flipCoin() { if(flippin) return; flippin=true; const c=document.getElementById('coinEl'); const r=Math.random()<0.5; c.style.transform=`rotateY(${r?0:180}deg)`; setTimeout(()=>{ document.getElementById('coinResult').textContent=r?"Cara!":"Coroa!"; flippin=false; }, 1000); }
 
-        /* 14. DICE */
         function rollDice() { const n=Math.floor(Math.random()*6)+1; const faces=['⚀','⚁','⚂','⚃','⚄','⚅']; document.getElementById('diceResult').textContent=faces[n-1]; }
 
-        /* 15. REFLEX */
         let rState=0; let rStart=0;
         function handleReflexClick() {
             const a=document.getElementById('reflexArea');
@@ -1235,26 +1135,20 @@
             else if(rState===2) { const t=Date.now()-rStart; document.getElementById('reflexTimer').textContent=`Tempo: ${t}ms`; a.className="reflex-area"; a.textContent="Clique para tentar de novo."; rState=0; }
         }
 
-        /* --- TOOLS LOGIC --- */
-        
-        /* 16. COLOR */
+        /* --- FERRAMENTAS UTILITÁRIAS --- */
         const cIn=document.getElementById('colorInput'); const hDisp=document.getElementById('hexDisplay');
         cIn.addEventListener('input',()=>hDisp.textContent=cIn.value.toUpperCase());
         function copyHex() { navigator.clipboard.writeText(hDisp.textContent); hDisp.textContent="Copiado!"; setTimeout(()=>hDisp.textContent=cIn.value.toUpperCase(),1000); }
 
-        /* 17. QR */
         function generateQR() { const txt=document.getElementById('qrInput').value||'Exemplo'; document.getElementById('qrImg').src=`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(txt)}`; }
 
-        /* 18. UNIT */
         const rates = { length:{m:1,km:0.001,cm:100,mm:1000,ft:3.28084,in:39.3701}, weight:{kg:1,g:1000,lb:2.20462,oz:35.274} };
         const units = { length:['m','km','cm','mm','ft','in'], weight:['kg','g','lb','oz'] };
         function setupUnit() {
             const t=document.getElementById('unitType').value; const u=units[t];
             const s=u.map(x=>`<option value="${x}">${x}</option>`).join('');
-            document.getElementById('unitFrom').innerHTML=s;
-            document.getElementById('unitTo').innerHTML=s;
-            document.getElementById('unitTo').selectedIndex=1;
-            convertUnit();
+            document.getElementById('unitFrom').innerHTML=s; document.getElementById('unitTo').innerHTML=s;
+            document.getElementById('unitTo').selectedIndex=1; convertUnit();
         }
         function convertUnit() {
             const t=document.getElementById('unitType').value; const v=parseFloat(document.getElementById('unitInput').value)||0;
@@ -1264,16 +1158,13 @@
         }
         setupUnit();
 
-        /* 19. CURRENCY (FIXED API) */
         async function convertCurrency() {
             const amt = parseFloat(document.getElementById('currAmount').value);
             const from = document.getElementById('currFrom').value;
             const to = document.getElementById('currTo').value;
             const resEl = document.getElementById('currOutput');
             const rateEl = document.getElementById('currRate');
-
             if (from === to) { resEl.value = amt; rateEl.textContent = "Taxa: 1:1"; return; }
-
             rateEl.textContent = "Buscando...";
             try {
                 const res = await fetch(`https://api.frankfurter.app/latest?amount=${amt}&from=${from}&to=${to}`);
@@ -1291,7 +1182,6 @@
         }
         convertCurrency();
 
-        /* 20. TEXT */
         function setCase(c) {
             const i=document.getElementById('textCaseInput');
             if(c==='upper') i.value=i.value.toUpperCase();
@@ -1299,7 +1189,7 @@
             if(c==='title') i.value=i.value.toLowerCase().replace(/\b\w/g, s=>s.toUpperCase());
         }
 
-        /* --- LOGICA DE PESQUISA (WEB & LOCAL) --- */
+        /* --- PESQUISA & FILTROS --- */
         const engines = {
             google: { name: 'Google', url: 'https://www.google.com.br/search?q=', icon: 'fa-brands fa-google icon-google' },
             bing: { name: 'Bing', url: 'https://www.bing.com.br/search?q=', icon: 'fa-brands fa-microsoft icon-bing' },
@@ -1320,27 +1210,21 @@
         const searchForm = document.getElementById('searchForm');
         const searchHistory = document.getElementById('searchHistory');
         const historyList = document.getElementById('historyList');
-
-        /* --- LÓGICA AVANÇADA DE FILTRAGEM --- */
         const cards = document.querySelectorAll('.card');
         const headers = document.querySelectorAll('.section-header');
 
         function filterCards() {
             const searchTerm = searchInput.value.toLowerCase();
             const activeCategory = document.querySelector('#catDropdown .dropdown-option.selected').dataset.catFilter;
-
             cards.forEach(card => card.style.display = 'none');
             headers.forEach(header => header.style.display = 'none');
-
             const visibleCategories = new Set();
 
             cards.forEach(card => {
                 const title = card.querySelector('h3').innerText.toLowerCase();
                 const category = card.dataset.cat;
-
                 const matchesCategory = activeCategory === 'all' || category === activeCategory;
                 const matchesSearch = title.includes(searchTerm);
-
                 if (matchesCategory && matchesSearch) {
                     card.style.display = 'flex';
                     visibleCategories.add(category);
@@ -1361,11 +1245,7 @@
         const catDropdown = document.getElementById('catDropdown');
         const catOptions = document.querySelectorAll('#catDropdown .dropdown-option');
 
-        catBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            catDropdown.classList.toggle('active');
-        });
-
+        catBtn.addEventListener('click', (e) => { e.stopPropagation(); catDropdown.classList.toggle('active'); });
         catOptions.forEach(opt => {
             opt.addEventListener('click', () => {
                 catOptions.forEach(o => o.classList.remove('selected'));
@@ -1374,15 +1254,10 @@
                 catDropdown.classList.remove('active');
             });
         });
-
         searchInput.addEventListener('input', filterCards);
 
-        // --- LÓGICA RESTANTE DA PESQUISA (Web) ---
-        engineBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            engineDropdown.classList.toggle('active');
-        });
-
+        // Lógica de Motor de Busca
+        engineBtn.addEventListener('click', (e) => { e.stopPropagation(); engineDropdown.classList.toggle('active'); });
         document.querySelectorAll('.engine-option').forEach(option => {
             option.addEventListener('click', () => {
                 const engineKey = option.getAttribute('data-engine');
@@ -1396,22 +1271,19 @@
                 searchInput.focus();
             });
         });
-
         document.addEventListener('click', (e) => {
             if (!engineBtn.contains(e.target)) engineDropdown.classList.remove('active');
             if (!searchInput.contains(e.target) && !searchHistory.contains(e.target)) searchHistory.classList.remove('active');
             if (!catBtn.contains(e.target) && !catDropdown.contains(e.target)) catDropdown.classList.remove('active');
         });
 
+        // Histórico
         const storageKey = 'vertexHub_history_v2';
         let searches = JSON.parse(localStorage.getItem(storageKey)) || [];
 
         function renderHistory() {
             historyList.innerHTML = '';
-            if (searches.length === 0) {
-                searchHistory.style.display = 'none';
-                return;
-            }
+            if (searches.length === 0) { searchHistory.style.display = 'none'; return; }
             searches.slice(0, 5).reverse().forEach(term => {
                 const div = document.createElement('div');
                 div.className = 'history-item';
@@ -1424,7 +1296,6 @@
                 historyList.appendChild(div);
             });
         }
-
         function saveToHistory(term) {
             if (!term || term.trim() === '') return;
             term = term.trim();
@@ -1434,12 +1305,10 @@
             localStorage.setItem(storageKey, JSON.stringify(searches));
             renderHistory();
         }
-
         searchInput.addEventListener('focus', () => {
             renderHistory();
             if (searches.length > 0) searchHistory.classList.add('active');
         });
-
         function performSearch(query) {
             if (query) {
                 const url = engines[currentEngine].url + encodeURIComponent(query);
@@ -1447,12 +1316,9 @@
                 window.open(url, '_blank');
             }
         }
+        searchForm.addEventListener('submit', (e) => { e.preventDefault(); performSearch(searchInput.value); });
 
-        searchForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            performSearch(searchInput.value);
-        });
-
+        // Voz
         const voiceBtn = document.getElementById('voiceBtn');
         if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1472,21 +1338,15 @@
             };
             recognition.onerror = () => { voiceBtn.classList.remove('listening'); };
             recognition.onend = () => { voiceBtn.classList.remove('listening'); };
-        } else {
-            voiceBtn.style.display = 'none'; 
-        }
+        } else { voiceBtn.style.display = 'none'; }
 
-        /* --- CONTROLE DE GRID (MOBILE E PC) --- */
+        /* --- GRID CONTROLS --- */
         const gridBtn = document.getElementById('gridBtn');
         const gridDropdown = document.getElementById('gridDropdown');
         const gridOptions = document.querySelectorAll('#gridDropdown .dropdown-option');
         const bentoGrid = document.getElementById('bentoGrid');
 
-        gridBtn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            gridDropdown.classList.toggle('active');
-        });
-
+        gridBtn.addEventListener('click', (e) => { e.stopPropagation(); gridDropdown.classList.toggle('active'); });
         gridOptions.forEach(option => {
             option.addEventListener('click', () => {
                 const cols = option.getAttribute('data-cols');
@@ -1496,7 +1356,6 @@
                 gridDropdown.classList.remove('active');
             });
         });
-
         function applyGrid(cols) {
             bentoGrid.classList.remove('cols-2', 'cols-3', 'cols-5');
             if (cols === 'auto') {
@@ -1508,45 +1367,24 @@
                 saveGridPreference(cols);
             }
         }
-
         function saveGridPreference(value) {
             if (window.innerWidth <= 600) localStorage.setItem('vertexHub_mobileCols', value);
             else localStorage.setItem('vertexHub_desktopCols', value);
         }
-
         function loadSavedGrid() {
-            let savedCols;
-            let key;
-            if (window.innerWidth <= 600) {
-                key = 'vertexHub_mobileCols';
-                savedCols = localStorage.getItem(key);
-                if(!savedCols) savedCols = '2';
-            } else {
-                key = 'vertexHub_desktopCols';
-                savedCols = localStorage.getItem(key);
-                if(!savedCols) savedCols = 'auto';
-            }
+            let savedCols; let key;
+            if (window.innerWidth <= 600) { key = 'vertexHub_mobileCols'; savedCols = localStorage.getItem(key); if(!savedCols) savedCols = '2'; } 
+            else { key = 'vertexHub_desktopCols'; savedCols = localStorage.getItem(key); if(!savedCols) savedCols = 'auto'; }
             const optToSelect = document.querySelector(`#gridDropdown .dropdown-option[data-cols="${savedCols}"]`);
             if(optToSelect) optToSelect.classList.add('selected');
             applyGrid(savedCols);
         }
         loadSavedGrid();
-
         let lastWidth = window.innerWidth;
-        window.addEventListener('resize', () => {
-            if (window.innerWidth !== lastWidth) {
-                lastWidth = window.innerWidth;
-                loadSavedGrid();
-            }
-        });
+        window.addEventListener('resize', () => { if (window.innerWidth !== lastWidth) { lastWidth = window.innerWidth; loadSavedGrid(); } });
+        document.addEventListener('click', (e) => { if (!gridBtn.contains(e.target) && !gridDropdown.contains(e.target)) { gridDropdown.classList.remove('active'); } });
 
-        document.addEventListener('click', (e) => {
-            if (!gridBtn.contains(e.target) && !gridDropdown.contains(e.target)) {
-                gridDropdown.classList.remove('active');
-            }
-        });
-
-        /* --- TILT 3D --- */
+        /* --- TILT 3D & RIPPLE --- */
         document.querySelectorAll('.card').forEach(c => {
             c.addEventListener('mousemove',e=>{
                 if(window.innerWidth>768){
@@ -1558,7 +1396,6 @@
             c.addEventListener('mouseleave',()=>c.style.transform='perspective(1000px) rotateX(0) rotateY(0) scale(1)');
         });
 
-        /* --- EFEITO RIPPLE DE CLIQUE --- */
         document.querySelectorAll('.card').forEach(card => {
             card.addEventListener('click', function(e) {
                 if(e.button === 0) {
