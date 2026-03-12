@@ -64,7 +64,7 @@
         h1, h2, h3, .logo { font-family: 'Space Grotesk', sans-serif; }
 
         /* --- BACKGROUND SYSTEM (IDENTICO AO GAMEHUB) --- */
-        /* Única Camada de Fundo (Padrão img2.jpeg ou Customizado) */
+        /* Única Camada de Fundo (Padrão img2.jpg ou Customizado) */
         #custom-bg-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh; 
@@ -72,8 +72,8 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* FUNDO PADRÃO: img2.jpeg */
-            background-image: url('img2.jpeg');
+            /* FUNDO PADRÃO: img2.jpg */
+            background-image: url('img2.jpg');
             opacity: 1;
             transition: background-image 0.5s ease, opacity 0.5s ease;
             pointer-events: none;
@@ -640,7 +640,7 @@
 </head>
 <body>
 
-    <!-- FUNDO PADRÃO (img2.jpeg) E CAMADA DE CUSTOMIZAÇÃO -->
+    <!-- FUNDO PADRÃO (img2.jpg) E CAMADA DE CUSTOMIZAÇÃO -->
     <div id="custom-bg-layer"></div>
 
     <div class="container">
@@ -1011,7 +1011,7 @@
                 bgLayer.style.backgroundImage = `url('${savedBg}')`;
             } else {
                 // Se não tiver customizado, usa o padrão (já definido no CSS, mas garante aqui)
-                bgLayer.style.backgroundImage = `url('img2.jpeg')`;
+                bgLayer.style.backgroundImage = `url('img2.jpg')`;
             }
             bgLayer.style.opacity = '1'; 
 
